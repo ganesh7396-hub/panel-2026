@@ -1,0 +1,1128 @@
+Question 1) What is Javascript? Features?
+
+Javascript:-
+
+    JavaScript is a lightweight,
+    interpreted programming language mainly used to make web pages dynamic and interactive
+    It runs in the browser,
+    now also on the server using environments like Node.js.
+    Key Features of JavaScript:-
+    Interpreted Language → No compilation needed, runs directly in the browser.
+    Event-Driven → Handles events like clicks, keypress, mouse actions efficiently.
+    Object-Oriented (Prototype-Based) → Supports objects, classes, and inheritance.
+    Asynchronous Support → Uses callbacks, promises, and async/await for non-blocking operations.
+    Dynamic Typing → Variables don’t need a fixed type; types are determined at runtime.
+    Cross-Platform → Works on all major browsers and devices.
+    Versatile → Can be used for frontend, backend, mobile apps, and desktop apps (Node.js, React, React Native, Electron).
+
+Question 2) What are data types in javascript ?
+    Primitive data types:-
+    Primitive data types are the basic, immutable values in JavaScript.
+    They are stored directly in memory and not as objects.
+    String → Text value
+    👉 "Hello", "JS"
+
+    Number → Numeric values (integer + float)
+    👉 10, 3.14
+
+    Boolean → True/False
+    👉 true, false
+
+    Undefined → A variable declared but not assigned
+    👉 let x; // undefined
+
+    Null → Intentional empty value
+    👉 let user = null
+
+    Symbol → Unique identifier (used in objects)
+    👉 const id = Symbol("id")
+
+    BigInt → Large numbers beyond Number limit
+    👉 const big = 12345678901234567890n
+
+    Non-primitive data types :-
+    Non-primitive data types are complex data structures that store values by reference, 
+    not directly. They are mutable, meaning their values can be changed.
+    Object → Collection of key–value pairs
+    const user = { name: "John", age: 25 };
+    Array → Ordered list of values
+    const numbers = [10, 20, 30];
+    Function → Callable object
+    function greet() {
+        console.log("Hello");
+    }
+
+Question 3) Explain the feature of  ES5 to ES12 with Example ?
+
+ES5:-
+use strict
+"use strict" is a directive in JavaScript that enables strict mode
+which helps catch common coding mistakes and prevents unsafe actions.
+Key Features (Benefits) of use strict:
+❌ Prevents using undeclared variables
+❌ Disallows duplicate parameter names
+❌ Stops accidental global variables
+❌ Makes code more secure and cleaner
+✔ Helps in debugging by throwing errors for bad practices
+isArray():-
+It is a method introduced in ES5 to check whether a given value is an array or not.
+Example:
+
+javascript-code :-
+console.log(Array.isArray([1, 2, 3])); // true
+console.log(Array.isArray("hello"));    // false
+map():-
+map() is an array method used to create a new array by applying a function to each element of the original array.
+It does not modify the original array.
+const numbers = [1, 2, 3, 4];
+const doubled = numbers.map(num => num * 2);
+console.log(doubled); // [2, 4, 6, 8]
+console.log(numbers); // [1, 2, 3, 4] (unchanged)
+var numbers = [1, 2, 3];
+var doubled = numbers.map(function(num) {
+  return num * 2;
+});
+console.log(doubled); // [2, 4, 6]
+filter():-
+filter() is an array method used to return only the elements that meet a specific condition.
+It creates a new array and does not modify the original array.
+const numbers = [1, 2, 3, 4, 5];
+
+// Keep only even numbers
+const evenNumbers = numbers.filter(num => num % 2 === 0);
+
+console.log(evenNumbers); // [2, 4]
+console.log(numbers);     // [1, 2, 3, 4, 5] (unchanged)
+
+    (or) 
+var numbers = [1, 2, 3, 4, 5];
+var evenNumbers = numbers.filter(function(num) {
+  return num % 2 === 0;
+});
+console.log(evenNumbers); // [2, 4]
+
+reduce()
+---------
+reduce() is an array method used to combine all elements of an array into a single value.
+It works by using an accumulator that keeps track of the result as it loops through the array.
+
+const numbers = [1, 2, 3, 4];
+
+const total = numbers.reduce((acc, num) => acc + num, 0);
+
+console.log(total); // 10
+acc → accumulator (stores the running result)
+
+num → current element
+
+0 → initial value of accumulator
+
+		(or)
+
+const numbers = [1, 2, 3, 4, 5];
+const sum = numbers.reduce(function (accumulator, num) {
+    return accumulator + num;
+}, 0);
+
+
+
+
+forEach():
+---------
+
+
+The forEach() method executes a provided function once for each array element.
+It doesn't return a new array.
+Example:
+
+javascript-code :
+---------------
+var numbers = [1, 2, 3];
+numbers.forEach(function(num) {
+  console.log(num);
+});
+
+every() 
+------
+
+every() is an array method that checks whether all elements in an array meet a given condition.
+If every element passes, it returns true; if any one fails, it returns false.
+
+const ages = [18, 20, 22, 24];
+
+const isAdult = ages.every(age => age >= 18);
+
+console.log(isAdult); // true
+
+some()
+-----
+
+some() is an array method that checks if at least one element in the array meets a condition.
+If any item passes, it returns true; if none pass, it returns false.
+
+javascript-code
+var ages = [15, 20, 25, 30];
+var hasAdult = ages.some(function(age) {
+  return age >= 18;
+
+});
+console.log(hasAdult); // true
+
+indexOf():
+--------
+indexOf() returns the first index at which a given element can be found in the array, or -1 if it is not present.
+
+lastIndexOf()
+------------
+lastIndexOf() returns the last index at which a given element can be found in the array, or -1 if it is not present.
+Example:
+
+javascript-code
+var fruits = ["apple", "banana", "orange", "apple"];
+console.log(fruits.indexOf("apple"));      // 0
+console.log(fruits.lastIndexOf("apple"));  // 3
+
+
+
+JSON.stringify():
+-------------- 
+method is used to convert JavaScript objects into JSON strings. This method is widely used for serializing data before transmitting it over a network or storing it in a file.
+
+Here's how JSON.stringify() works:
+
+javascript
+Copy code
+var obj = {
+  name: 'John',
+  age: 30,
+  city: 'New York'
+};
+
+var jsonString = JSON.stringify(obj);
+console.log(jsonString); // {"name":"John","age":30,"city":"New York"}
+In the example above:
+
+
+valueOf:
+-------
+valueOf() method in JavaScript is part of the Date object. It returns the primitive value of a Date object, which is the number of milliseconds since the Unix epoch (January 1, 1970, 00:00:00 UTC).
+Here's how you can use valueOf() with a Date object:
+
+javascript-code
+---------------
+var currentDate = new Date();
+var primitiveValue = currentDate.valueOf();
+console.log(primitiveValue); //
+
+
+ES6:
+
+
+
+Arrow Functions:
+-------------------
+Arrow functions allows a short syntax for writing function expressions.
+Arrow functions do not have their own this. They are not well suited for defining object methods.
+
+
+
+Arrow functions provide a concise syntax for writing function expressions.
+They use a more compact syntax and lexically bind the this value.
+
+Example:
+
+javascript-code
+// ES5
+var multiply = function(x, y) {
+  return x * y;
+};
+
+// ES6
+const multiply = (x, y) => x * y;
+
+let
+---
+Used to declare variables that can change later.
+It has block scope, meaning it is only accessible inside { }.
+
+let age = 25;
+age = 30; // allowed
+
+
+const
+----
+Used to declare variables whose value cannot be reassigned.
+Also has block scope.
+const name = "John";
+// name = "Mike"; ❌ Not allowed
+
+for...of
+---------
+
+
+for...of is a loop used to iterate over iterable items like arrays, strings, maps, and sets.
+It gives you the actual value, not the index, making the code easier to read.
+
+const numbers = [10, 20, 30];
+
+for (const num of numbers) {
+  console.log(num);
+}
+
+Default Parameter
+------------------
+
+function user (name,age=20){
+    console.log(name+""+age)
+}
+user('john',25)
+
+Rest Operation
+---------------
+function user(name,...remanining){
+    console.log(name,"",+remaining)
+}
+user('john',25,'mail@gmail.com',123456)
+
+Spread Operator:
+---------------
+
+let arr1 =[1,2,3,4,5]
+let arr2 =[6,7,8,9,10]
+let arr3 =[...arr1,...arr2];
+console.log(arr3);
+
+Destructing :
+------------
+
+let person ={
+    name:"John",
+    age:25,
+    mail:'john@gmail.com'
+}
+const [name,age,mail]=person
+console.log(name)
+
+ES7:
+includes()
+-----------
+includes() Method
+Used to check if an array contains a specific value.
+Returns true or false.
+
+const numbers = [1, 2, 3, 4];
+
+console.log(numbers.includes(3));  // true
+console.log(numbers.includes(10)); // false
+
+Exponentiation Operator
+------------------------
+
+Exponentiation Operator (**)
+A short and clean way to write powers (instead of Math.pow()).
+console.log(2 ** 3);   // 8
+console.log(5 ** 2);   // 25
+
+
+ES8 :
+
+
+padStart():
+-----------
+let data ="hello";
+console.log(data.padStart(8,'*')) hello***
+
+padEnd():
+----------
+let data ="hello";
+console.log(data.padEnd(8,'*')) ***hello
+
+Object.entires
+--------------
+var  data={
+    name:'ganesh',
+    age:30,
+
+}
+console.log(object.entires(data))
+Output :[[name,ganesh],[],[]]
+
+object.values
+--------------
+
+console.log(object.values(data))
+[name,30]
+
+async and await
+
+async/await is a cleaner and easier way to write asynchronous code instead of using callbacks or promises.
+async makes a function return a promise.
+await pauses the execution until a promise resolves.
+
+
+
+ES9 :
+
+
+
+Regular Expresssion Improvement
+Rest/Spread properties
+
+Regular Expresssion Improvement
+---------------------------
+let data ="Hello world 123"
+console.log(data.match(/[0-9]/)g)
+
+Rest/Spread properties
+------------------------
+let data =[1,2,3,4,5]
+console.log(Math.max(...data))
+
+ES10 :
+
+
+
+Flat
+----
+
+let data [1,2,3,[4,5,6,[7,8,9]]]
+
+console.log(data.flat(1))//1,2,3,4,5,6[7,8,9]
+
+Function.toString
+-----------------
+function func(){
+    console.log('hello world')
+}
+console.log(fun.toString())
+
+trimStart
+----------
+let data = "  hello"
+console.log(data.trimstart()) //hello
+
+trimEnd
+-------
+let data ="hello ";
+console.log(data.trimEnd()) //hello
+
+
+Object.fromEntries
+------------------
+var data=[['name','ganesh']]
+console.log(Object.fromEntries(data))
+{name:ganesh}
+
+ES 11
+
+-BIG_INT
+--------
+2** 53-1
+
+-Dynamic Import 
+>
+Nullish Operator
+----------------
+
+let data = null
+let output =data ?? 'jhon'
+console.log(output) jhon;
+
+
+Optional chaninning
+-------------------
+Optional chaininng is a safe way to access nested object properties ,even if the property
+doesn't exist
+
+let  pets ={
+    cat:{
+        name:'Neo'
+    }
+}
+alert(pets.dog?.name)
+
+replaceall()
+-----------
+String property.replaceall()
+let data ='java';
+console.log(data.replaceAl('x','a'))
+numeric Operator
+----------------
+let data = 1_599
+console.log(data) =1500
+
+
+Logical Assignment Operators
+-----------------------------
+&&= || =
+
+let arr1 =10
+let arr2 =20
+arr2 ||=arr1
+console.log(arr1);10
+
+Question 4) what is string Methods ?
+
+
+charAt :
+------
+charAt(index): Returns the character at the specified index in a string.
+javascript-code:
+---------------
+const str = 'Hello';
+console.log(str.charAt(0)); // Output: H
+
+
+charCodeAt :
+---------
+charCodeAt(index): Returns the Unicode value of the character at the specified index in a string.
+javascript-code
+const str = 'Hello';
+console.log(str.charCodeAt(0)); // Output: 72
+
+
+concat :
+------
+concat(str1, str2, ...): Concatenates two or more strings and returns a new string.
+javascript-code
+	const str1 = 'Hello';
+	const str2 = ' World';
+	console.log(str1.concat(str2)); // Output: Hello World
+
+
+indexOf():
+---------
+indexOf(searchValue, startIndex): Returns the index of the first occurrence of a specified value in a string.
+javascript-code
+	const str = 'Hello World';
+	console.log(str.indexOf('o')); // Output: 4
+
+lastIndexOf ():
+------------
+lastIndexOf(searchValue, startIndex): Returns the index of the last occurrence of a specified value in a string.
+javascript-code
+
+const str = 'Hello World';
+console.log(str.lastIndexOf('o')); // Output: 7
+
+slice
+-----
+slice(startIndex, endIndex): Extracts a portion of a string and returns a new string.
+
+javascript-code
+const str = 'Hello World';
+console.log(str.slice(6)); // Output: World
+
+slice :
+------
+
+slice(startIndex, endIndex): Extracts a portion of a string and returns a new string.
+
+javascript-code
+const str = 'Hello World';
+console.log(str.slice(6)); // Output: World
+
+substring :
+-----------
+substring(startIndex, endIndex): Similar to slice, but does not accept negative indices.
+javascript-code
+const str = 'Hello World';
+console.log(str.substring(6)); // Output: World
+
+toUpperCase()
+-----------
+toUpperCase(): Converts all characters in a string to uppercase.
+javascript-code
+const str = 'Hello World';
+console.log(str.toUpperCase()); // Output: HELLO WORLD
+
+toLowerCase():
+------------
+ Converts all characters in a string to lowercase.
+javascript-code
+const str = 'Hello World';
+console.log(str.toLowerCase()); // Output: hello world
+
+replace()
+---------
+
+replace(searchValue, newValue): Replaces a specified value with another value in a string.
+javascript-code
+const str = 'Hello World';
+console.log(str.replace('World', 'Universe')); 
+// Output: Hello Universe
+
+split()
+-------
+split(separator, limit): Splits a string into an array of substrings based on a specified separator.
+javascript-code
+const str = 'apple,banana,orange';
+console.log(str.split(',')); // Output: ["apple", "banana", "orange"]
+
+
+Question 5) what is Array methods ?
+push()
+-----
+
+push(element1, element2, ...): Adds one or more elements to the end of an array and returns the new length of the array.
+javascript-code
+
+const arr = [1, 2, 3];
+arr.push(4, 5);
+console.log(arr); // Output: [1, 2, 3, 4, 5]
+
+
+pop()
+----
+pop(): Removes the last element from an array and returns that element.
+javascript-code
+
+const arr = [1, 2, 3];
+const removedElement = arr.pop();
+console.log(arr); // Output: [1, 2]
+console.log(removedElement); // Output: 3
+
+shift()
+------
+shift(): Removes the first element from an array and returns that element.
+javascript-code
+
+const arr = [1, 2, 3];
+const removedElement = arr.shift();
+console.log(arr); // Output: [2, 3]
+console.log(removedElement); // Output: 1
+
+unshift();
+---------
+unshift(element1, element2, ...): Adds one or more elements to the beginning of an array and returns the new length of the array.
+javascript-code
+
+const arr = [2, 3];
+arr.unshift(0, 1);
+console.log(arr); // Output: [0, 1, 2, 3]
+
+splice()
+--------
+
+splice(startIndex, deleteCount, element1, element2, ...): Changes the contents of an array by removing or replacing existing elements and/or adding new elements in place.
+javascript-code
+
+const arr = [1, 2, 3, 4, 5];
+arr.splice(2, 2, 'a', 'b');
+console.log(arr); // Output: [1, 2, 'a', 'b', 5]
+
+
+slice ()
+------
+slice(startIndex, endIndex): Returns a shallow copy of a portion of an array as a new array without modifying the original array.
+javascript-code
+
+const arr = [1, 2, 3, 4, 5];
+const slicedArray = arr.slice(1, 4);
+console.log(slicedArray); // Output: [2, 3, 4]
+
+concat()
+-------
+
+concat(array1, array2, ...): Returns a new array by concatenating two or more arrays or values to the original array.
+javascript-code
+
+const arr1 = [1, 2];
+const arr2 = [3, 4];
+const newArr = arr1.concat(arr2);
+console.log(newArr); // Output: [1, 2, 3, 4]
+
+Question 6) What is Shallow Copy and Deep Copy?
+Shallow Copy:
+A shallow copy creates a new object, but copies only the reference of nested objects.
+Changes to nested data affect both original and copied objects.
+
+const user = {
+  name: "Ganesh",
+  address: { city: "Bangalore" }
+};
+const copyUser = { ...user };
+copyUser.address.city = "Chennai";
+console.log(user.address.city); // Chennai
+
+Deep Copy:
+
+A deep copy creates a completely independent copy, including all nested objects.
+Changes in one object do not affect the other.
+
+const user = {
+  name: "Ganesh",
+  address: { city: "Bangalore" }
+};
+
+const deepCopy = JSON.parse(JSON.stringify(user));
+
+deepCopy.address.city = "Mumbai";
+
+console.log(user.address.city); // Bangalore
+
+
+Question 7)What is Difference between Arrow and Normal function ?
+
+Arrow Functions:
+-------------------
+Arrow functions allows a short syntax for writing function expressions.
+Arrow functions do not have their own this. They are not well suited for defining object methods.
+Arrow functions provide a concise syntax for writing function expressions.
+They use a more compact syntax and lexically bind the this value.
+
+Example:
+
+javascript-code
+// ES5
+var multiply = function(x, y) {
+  return x * y;
+};
+
+// ES6
+const multiply = (x, y) => x * y;
+
+Normal Function
+--------------- 
+
+A normal function is a traditional JavaScript function that has its own this context, arguments object, and can be used as a constructor.
+
+Has its own this
+Has arguments object
+Can be used with new
+Supports hoisting
+
+Question 8)What is async and await ?
+async: A function declared with async automatically returns a Promise.
+await is used inside an async function to pause the execution of that function until the Promise is resolved or rejected.
+code:-
+    async function getDataWithError() {
+    try {
+        console.log("Fetching data...");
+        const result = await fetchDataWithError(); // This will throw an error
+        console.log(result);
+    } catch (error) {
+        console.error("Error:", error.message);
+    }
+    }
+
+Question 9) What is callback hell? Give a code example.?
+Callback hell:-
+    Callback hell is a situation in JavaScript where many callbacks are nested inside each other, 
+    making the code hard to read, understand, and maintain.
+    It usually happens when multiple asynchronous operations depend on one another,
+    and the code looks like a pyramid of doom.
+code:-
+function task1(callback) {
+    setTimeout(() => {
+        console.log("Task 1 completed");
+        callback(null, "Data from Task 1");
+    }, 1000);
+}
+
+function task2(dataFromTask1, callback) {
+    setTimeout(() => {
+        console.log("Task 2 completed with:", dataFromTask1);
+        callback(null, "Data from Task 2");
+    }, 1000);
+}
+
+function task3(dataFromTask2, callback) {
+    setTimeout(() => {
+        console.log("Task 3 completed with:", dataFromTask2);
+        callback(null, "Data from Task 3");
+    }, 1000);
+}
+
+// Nested Callbacks (Callback Hell)
+task1((err, data1) => {
+    if (err) return console.error(err);
+    task2(data1, (err, data2) => {
+        if (err) return console.error(err);
+        task3(data2, (err, data3) => {
+            if (err) return console.error(err);
+            console.log("All tasks completed:", data3);
+        });
+    });
+});
+
+Question 10)  What is callback ? with coding example ?
+
+A callback function is a function passed into another function as an argument,
+ which is then invoked inside the outer function to complete some kind of routine or action
+
+Realtime Usage :
+
+Database operations
+✔ File system (fs.readFile)
+✔ API requests
+✔ Timers & events
+
+
+ JS-code :
+ const  addoneTo = function(number,callback){
+let result = number + 1;
+if(callback){
+	callback(result);
+}
+}
+
+addoneTo(5,function (res){
+console.log(res);
+});
+
+    user.find(,function(err,data)=>{        
+
+    })
+
+Question 11) What is a Promise in Node Js? Explain its use with an example, and describe the methods available in a Promise.?
+Promise :-
+    Promise is Object  represents eventual completion of asynchronous operation and its resulting value
+    Pending: The Promise is waiting and the operation is not yet completed.
+    Fulfilled: The operation completed successfully, and the Promise has a resolved value.
+    Rejected: The operation failed, and the Promise has a reason for failure (error). 
+
+    promise is an object that is returned immediately but the result arrive later in feature 
+    Promise take method with two arguments resolve and reject
+    Resolve is called when we use result
+    Reject is called when we have error
+    This promise object returned two methods ,then raised through the resolve method
+    Catch gets the error thrown with reject method 
+code:-
+    const sum= (number)=>{
+    return new Promise((resolve,reject)=>{
+        if (typeof number !== "number") {
+        reject("Input must be a number");
+        } else {
+        let result = number + 1;
+        resolve(result);
+        }
+    })
+    }
+
+    sum('123').then(res=>{
+        console.log(res)
+    }).catch(err=>{
+    console.log(err)
+    })
+
+    const customer = (userId) => {
+        return new Promise((resolve, reject) => {
+            users.findOne({ _id: userId }).exec().then((custObj) => {
+                if (custObj) {
+                resolve(custObj);
+                } else {
+                reject('Failure');
+                }
+            });
+        });
+    }
+
+
+1. Promise.all()
+
+Definition:
+Runs multiple promises in parallel and resolves when all succeed.
+Rejects if any one fails.
+
+Example:
+
+Promise.all([p1, p2]).then(res => console.log(res)).catch(err => console.log(err));
+
+2. Promise.race()
+
+Definition:
+Returns the result of the first promise that finishes (resolve or reject).
+
+Example:
+
+Promise.race([p1, p2]).then(res => console.log(res)).catch(err => console.log(err));
+
+3. Promise.allSettled()
+
+Definition:
+Waits for all promises and returns their status (fulfilled/rejected).
+
+Example:
+
+Promise.allSettled([p1, p2]).then(res => console.log(res));
+
+4. Promise.any()
+
+Definition:
+Returns the first successful promise.
+Fails only if all promises fail.
+
+Example:
+
+Promise.any([p1, p2]).then(res => console.log(res)).catch(err => console.log(err));
+
+Question 12) What is Hoisting?
+
+Hoisting means JavaScript moves variable and function declarations
+to the top of their scope during the compile phase before the code runs.
+
+
+console.log(a); // undefined (because of var hoisting)
+var a = 10;
+
+test(); // Works
+function test() {
+  console.log("Function hoisted");
+}
+
+Real-Time Use Case
+Function hoisting helps when we structure code with functions at the bottom and logic at the top for readability.
+Example: Utility functions written after main logic still work.
+
+js
+Copy code
+
+Question 13)what are the LocalStorage and SessionStorage and Cookie with code example?
+ocalStorage:
+localStorage stores data with no expiration time. The data will persist even when the browser is closed and reopened.
+
+
+// Storing data in localStorage
+localStorage.setItem('username', 'JohnDoe');
+localStorage.setItem('isLoggedIn', 'true');
+
+// Retrieving data from localStorage
+const username = localStorage.getItem('username');
+const isLoggedIn = localStorage.getItem('isLoggedIn');
+
+console.log(username);     // Output: JohnDoe
+console.log(isLoggedIn);   // Output: true
+
+sessionStorage:
+sessionStorage is similar to localStorage, but the data is only accessible for the duration of the page session. 
+Once the user closes the tab or browser, the data is cleared.
+
+// Storing data in sessionStorage
+sessionStorage.setItem('theme', 'dark');
+sessionStorage.setItem('language', 'en');
+
+// Retrieving data from sessionStorage
+
+const theme = sessionStorage.getItem('theme');
+const language = sessionStorage.getItem('language');
+
+console.log(theme);       // Output: dark
+console.log(language);    // Output: en
+
+Question 14) what are the Call(),apply(),bind() with example?
+
+call() Method:
+The call() method is used to invoke a function with a specified this value and individual arguments passed in order.
+getUserRole.call(req.user);
+👉 Used in Node.js to reuse a function with the current request user.
+Syntax:
+------
+javascript:
+
+function greet(message) {
+  console.log(`${message}, ${this.name}!`);
+}
+const person = { name: 'John' };
+greet.call(person, 'Hello');
+
+// Output: Hello, John!
+2. apply() Method:
+The apply() method is similar to call(), but it takes an array or an array-like object as its second argument instead of individual arguments.
+
+Math.max.apply(null, orderAmounts);
+👉 Used when values come dynamically (e.g., prices from DB).
+Syntax:
+------
+function greet(message) {
+  console.log(`${message}, ${this.name}!`);
+}
+
+const person = { name: 'John' };
+
+greet.apply(person, ['Hello']);
+// Output: Hello, John!
+
+
+function sum(a, b, c) {
+  return this.factor * (a + b + c);
+}
+
+const multiplier = { factor: 2 };
+
+const result = sum.apply(multiplier, [1, 2, 3]);
+console.log(result);
+// Output: 12 (2 * (1 + 2 + 3))
+
+
+3. bind() Method:-
+
+The bind() method creates a new function with the same body as the original function but with a fixed this value.
+It does not immediately invoke the function but allows you to create a "bound" function that can be invoked later.
+onst onClick = this.handleClick.bind(this);
+👉 Used in React / callbacks to preserve this.
+
+Syntax:
+-----
+
+function greet(message) {
+  console.log(`${message}, ${this.name}!`);
+}
+
+const person = { name: 'John' };
+
+const greetJohn = greet.bind(person, 'Hello');
+greetJohn();
+
+
+ Question 15) What is  Closure with example ?
+
+A closures is the combination of functions bundle together with reference to its  state
+ (the lexical)
+environment A clousures gives  access to outer function scope  from an inner function 
+in javscript closure are created every time  a function is created at function each time
+
+code :
+function init(){
+    var name = "Mozilla";
+    funcion displayName(){
+        cosnole.log(name)
+    }
+        displayName()
+    
+}
+
+init()
+
+
+
+Real-Time Node.js Example:
+------------------------
+function createDBConnection() {
+  let connection = null;
+
+  return function getConnection() {
+    if (!connection) {
+      console.log("Creating DB connection...");
+      connection = { status: "connected" }; // simulate DB connection
+    }
+    return connection;
+  };
+}
+
+const getDB = createDBConnection();
+
+getDB(); // Creating DB connection...
+getDB(); // Reuses same connection
+
+1. Database Connection Reuse
+---------------------------
+Why Closure Here?
+connection is private
+Prevents multiple DB connections
+Common in Node.js backend apps
+
+
+Express Middleware
+------------------
+function authorize(role) {
+  return function (req, res, next) {
+    if (req.user.role === role) {
+      next();
+    } else {
+      res.status(403).send("Forbidden");
+    }
+  };
+}
+
+// Usage
+app.get("/admin", authorize("admin"), (req, res) => {
+  res.send("Welcome Admin");
+});
+
+authorize("admin") stores role
+Middleware function remembers role
+This is a closure in action
+
+
+Question 16)how many loops in Javascript like for ,for in ,for of ,dowhile while?
+
+for - loops through a block of code a number of times
+for/in - loops through the properties of an object
+for/of - loops through the values of an iterable object
+while - loops through a block of code while a specified condition is true
+do/while - also loops through a block of code while a specified condition is true
+while:-checks the condition before execution,
+do...while :- checks the condition after execution.
+
+Question 17)What is Currying?
+    Currying is a functional programming technique used in JavaScript and other programming languages.
+    It involves transforming a function that takes multiple arguments into a sequence of functions, each taking a single argument.
+    This allows for more flexible function composition and partial application
+
+// Normal function
+function add(x, y) {
+    return x + y;
+}
+
+// Curried version of add function
+function curriedAdd(x) {
+    return function(y) {
+        return x + y;
+    };
+}
+
+// Usage of curried function
+const addFive = curriedAdd(5);
+console.log(addFive(3)); // Output: 8
+
+Question 18)What is Promise Chaining ?-
+Promise chaining is executing multiple async operations sequentially by returning a promise inside 
+.then() so the next step waits for the previous one to finish.
+
+Question 19)what is Debouncing with real time example ?
+Defination :-
+Wait until the user stops doing an action for a specific time, then run the function only once
+Why we use:-
+To avoid calling function again and again continuously.
+Real-time example:
+
+Search input box (Google Search) :-
+When user types a -> ap -> app -> appl -> apple
+You should call API only once after user stops typing.
+
+Questions 20)What is Throttling  with real example ?
+Defination :-
+Run the function at max once in every fixed time interval, even if event triggers many times.
+To control function calls in high frequency events.
+Why we use:-
+Scroll event / Window resize
+User scrolls 100 times quickly
+But we allow function to run only once every 1 second
+
+Questions 21)What is difference between Fetch API and Axios (Third-Party Library)?
+Fetch API :-
+Built-in browser API
+1.Fetch is a native Web API, so no extra library installation is needed.
+2.Manual JSON handling
+You must explicitly convert the response using
+response.json()
+3.Does not auto-handle HTTP errors
+Fetch does not reject promises for 404/500 errors — you must check response.ok manually.
+4.No request/response interceptors
+Harder to handle global headers (like auth tokens) or logging.
+5.Basic features only
+No built-in support for request cancellation, timeouts, or automatic retries.
+Axios (Third-Party Library) :-
+External library
+1.Needs installation using
+npm install axios
+2.Automatic JSON parsing
+Response data is already parsed and available as
+response.data
+3.Auto handles HTTP errors
+Axios rejects promises for 4xx/5xx status codes automatically.
+4.Supports interceptors
+Easy to add auth tokens, logging, or global error handling using interceptors.
+5.Advanced features
+Supports request cancellation, timeouts, and request/response transformation.
