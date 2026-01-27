@@ -1,0 +1,879 @@
+Question 1) What is Node JS?
+    Node js is Open-source
+    Server side runtime environment built on google chrome v8 javascript Engine
+    Its Provide event-driven, non-blocking (asychronus)I/O
+    cross-platform 
+    runtime environment  for building highly scalable server side application using javascript
+
+Question 2) What is a Runtime Environment ?
+    A runtime environment is the setup that provides all the tools, libraries, and infrastructure necessary for code execution
+
+Question 3) What are the key features of Node.js?
+1. Asynchronous & Event-Driven
+  Non-blocking I/O operations using an event loop.
+  Handles multiple requests efficiently without waiting for tasks to complete.
+2. Single-Threaded but Highly Scalable
+  Uses a single-threaded event loop to manage multiple client requests efficiently.
+3. Cross-Platform
+  Works on Windows, macOS, and Linux.
+4. Fast Performance with V8 Engine
+  Uses Google’s V8 JavaScript engine for high-speed execution.
+  Converts JavaScript to machine code for better efficiency.
+5. Microservices & API Development
+  Ideal for RESTful APIs and GraphQL services.
+6. Built-in Package Manager (npm)
+  The world’s largest package ecosystem.
+  Easy to install and manage third-party libraries.
+7. Streaming & Buffering
+  Handles streams efficiently for file uploads, video processing, etc.
+  No need to buffer entire data before processing.
+8. Support for WebSockets
+  Enables real-time applications (e.g., chat apps, live notifications).
+  Supports frameworks like Socket.io.
+9. Robust Frameworks & Libraries
+  Express.js, Nest.js, Fastify for backend development.
+  Mongoose for MongoDB integration.
+10. Strong DevOps & Cloud Integration
+  Works well with AWS, Azure, and GCP.
+  Serverless computing with AWS Lambda.
+
+  Question 4) What is a module, and can you explain the different types of modules?
+    Module in Node.js is a simple or complex functionality organized in single or multiple JavaScript files
+    which can be reused throughout the Node.js application.Each module in Node.js has its own context,
+    so it cannot interfere with other modules or pollute global scope.
+    Also, each module can be placed in a separate .js file under a separate folder.
+    Node.js includes three types of modules:
+	1)Core Modules
+	2)Local Modules
+	3)Third Party Modules
+    1)Core Modules :-
+        Core modules are built-in modules provided by Node.js.
+        They can be used directly without installing anything.
+        fs – File system operations
+        http – Create web servers
+        path – Handle file paths
+    2)Local Modules:-	Custom modules created by the user	mathUtils, helper.js
+    3)Third-Party Modules:- Installed via npm lodash, express, axio
+
+Question 5) What are package.json and package-lock.json?
+package.json :-
+    File in Node.js is the heart of the entire application.
+    It is basically the manifest file that contains the metadata of the project where we define the properties of a package.
+    name: The name of the project.
+    version: The version number of the project.
+    description: A brief description of the project.
+    main: The entry point of the application, typically the main JavaScript file.
+    scripts: An object containing scripts that can be run using npm. Common scripts include start, test, and others.
+    dependencies: A list of production dependencies. These are packages that are required for the application to run in a production environment.
+    devDependencies: A list of development dependencies. These are packages that are only required during development, such as testing frameworks and build tools.
+    keywords: An array of keywords that describe the project.
+    author: The author of the project.
+    license: The project's license.
+    repository: Information about the version control repository where the project's source code is hosted.
+
+package-lock.json:-
+    package-lock.json is an auto-generated file created by npm that records the exact versions of installed dependencies and their dependency tree.
+Uses:-
+    Ensures the same dependency versions for all developers and CI/CD environments
+    Prevents “it works on my machine” issues
+    Provides consistent and reliable builds across environments
+    Enables faster installs because npm doesn’t need to recalculate dependency versions
+    Improves security and stability by locking dependencies
+
+Question 6)What is REPL?
+    REPL in Node.js stands for Read, Eval, Print, and Loop.
+    It represents a computer environment such as a window console or Unix/Linux shell
+    Read: Reads the user’s input, parses it into JavaScript data-structure and then stores it in the memory. 
+    Eval: Receives and evaluates the data structure
+    Print: Prints the final result
+    Loop: Loops the provided command until CTRL+C is pressed twice
+
+Question 7)What is callback ?
+callback:-
+    A callback function is a function passed into another function as an argument,
+    which is then invoked inside the outer function to complete some kind of routine or action
+Realtime Usage :-
+    Database operations
+    ✔ File system (fs.readFile)
+    ✔ API requests
+    ✔ Timers & event
+
+Code :-
+    const  addoneTo = function(number,callback){
+    let result = number + 1;
+    if(callback){
+        callback(result);
+    }
+    }
+
+    addoneTo(5,function (res){
+    console.log(res);
+    });
+
+    user.find({},function(err,data)=>{        
+    })
+
+    var fs = require(‘fs’);
+    fs.readFile(‘testxt.text’,function (err,data){
+    if(err){
+        console.log(err)
+    }else{
+        console.log(data)
+        }
+    })
+
+Question 8)What is async and await ?
+async: A function declared with async automatically returns a Promise.
+await is used inside an async function to pause the execution of that function until the Promise is resolved or rejected.
+code:-
+    async function getDataWithError() {
+    try {
+        console.log("Fetching data...");
+        const result = await fetchDataWithError(); // This will throw an error
+        console.log(result);
+    } catch (error) {
+        console.error("Error:", error.message);
+    }
+    }
+
+Question 9) What is callback hell? Give a code example.?
+Callback hell:-
+    Callback hell is a situation in JavaScript where many callbacks are nested inside each other, 
+    making the code hard to read, understand, and maintain.
+    It usually happens when multiple asynchronous operations depend on one another,
+    and the code looks like a pyramid of doom.
+code:-
+function task1(callback) {
+    setTimeout(() => {
+        console.log("Task 1 completed");
+        callback(null, "Data from Task 1");
+    }, 1000);
+}
+
+function task2(dataFromTask1, callback) {
+    setTimeout(() => {
+        console.log("Task 2 completed with:", dataFromTask1);
+        callback(null, "Data from Task 2");
+    }, 1000);
+}
+
+function task3(dataFromTask2, callback) {
+    setTimeout(() => {
+        console.log("Task 3 completed with:", dataFromTask2);
+        callback(null, "Data from Task 3");
+    }, 1000);
+}
+
+// Nested Callbacks (Callback Hell)
+task1((err, data1) => {
+    if (err) return console.error(err);
+    task2(data1, (err, data2) => {
+        if (err) return console.error(err);
+        task3(data2, (err, data3) => {
+            if (err) return console.error(err);
+            console.log("All tasks completed:", data3);
+        });
+    });
+});
+
+Question 10) What is a Promise in Node Js? Explain its use with an example, and describe the methods available in a Promise.?
+Promise :-
+    Promise is Object  represents eventual completion of asynchronous operation and its resulting value
+    Pending: The Promise is waiting and the operation is not yet completed.
+    Fulfilled: The operation completed successfully, and the Promise has a resolved value.
+    Rejected: The operation failed, and the Promise has a reason for failure (error). 
+
+    promise is an object that is returned immediately but the result arrive later in feature 
+    Promise take method with two arguments resolve and reject
+    Resolve is called when we use result
+    Reject is called when we have error
+    This promise object returned two methods ,then raised through the resolve method
+    Catch gets the error thrown with reject method 
+code:-
+    const sum= (number)=>{
+    return new Promise((resolve,reject)=>{
+        if (typeof number !== "number") {
+        reject("Input must be a number");
+        } else {
+        let result = number + 1;
+        resolve(result);
+        }
+    })
+    }
+
+    sum('123').then(res=>{
+        console.log(res)
+    }).catch(err=>{
+    console.log(err)
+    })
+
+    const customer = (userId) => {
+        return new Promise((resolve, reject) => {
+            users.findOne({ _id: userId }).exec().then((custObj) => {
+                if (custObj) {
+                resolve(custObj);
+                } else {
+                reject('Failure');
+                }
+            });
+        });
+    }
+
+
+1. Promise.all()
+
+Definition:
+Runs multiple promises in parallel and resolves when all succeed.
+Rejects if any one fails.
+
+Example:
+
+Promise.all([p1, p2]).then(res => console.log(res)).catch(err => console.log(err));
+
+2. Promise.race()
+
+Definition:
+Returns the result of the first promise that finishes (resolve or reject).
+
+Example:
+
+Promise.race([p1, p2]).then(res => console.log(res)).catch(err => console.log(err));
+
+3. Promise.allSettled()
+
+Definition:
+Waits for all promises and returns their status (fulfilled/rejected).
+
+Example:
+
+Promise.allSettled([p1, p2]).then(res => console.log(res));
+
+4. Promise.any()
+
+Definition:
+Returns the first successful promise.
+Fails only if all promises fail.
+
+Example:
+
+Promise.any([p1, p2]).then(res => console.log(res)).catch(err => console.log(err));
+
+
+Question 10) What is Event-loop ?
+    The Event Loop in Node.js is a mechanism that enables non-blocking asynchronous execution using a single thread.
+    Synchronous code runs on the call stack, while asynchronous operations are handled by libuv in the background.
+    When these operations complete, their callbacks are placed into different event-loop phases.
+    The event loop continuously checks the call stack and executes callbacks, 
+    prioritizing microtasks like Promises and process.nextTick before timers and I/O callbacks.
+    This is how Node.js achieves high concurrency and performance.
+
+Question 11) What is Event-driven programming ?
+    Event-driven programming is an approach that heavily makes use of events for triggering various functions.
+    An event can be anything like a mouse click, key press, etc.
+    When an event occurs, a call back function is executed that is already registered with the element. 
+    This approach mainly follows the publish-subscribe pattern. 
+    Because of event-driven programming, Node.js is faster when compared to other technologies.
+
+Question 12) What is EventEmitter?
+    EventEmitter is a core Node.js module used for event-driven programming.
+    It allows us to create events, listen to events, and trigger events
+    How it works (Simple):-
+    .on() → listens for an event
+    .emit() → triggers the event
+    When the event is emitted, the callback runs automatically
+
+code :-
+    const EventEmitter = require("events");
+    const event = new EventEmitter();
+
+    event.on("greet", () => {
+    console.log("Hello!");
+    });
+
+    event.emit("greet");
+    Node.js waits for the "greet" event.
+    When .emit("greet") is called → the listener runs → "Hello!" is printed.
+
+Question 13)  What is Stream ?types of stream ?
+    Streams are the objects 
+    that facilitate you to read data from a source 
+    and write data to a destination.
+    There are four types of streams in Node.js:
+
+    Readable: This stream is used for read operations.
+    Writable: This stream is used for write operations.
+    Duplex: This stream can be used for both read and write operations.
+    Transform: It is type of duplex stream where the output is computed according to input.
+code :-SERVER WITH FILE READING
+
+    const fs = require('fs');
+
+    const readStream = fs.createReadStream('input.txt', {
+        encoding: 'utf8'
+    });
+
+    let fileData = '';
+
+    readStream.on('data', (chunk) => {
+        fileData += chunk;
+    });
+
+    readStream.on('end', () => {
+        console.log(fileData);
+    });
+
+    readStream.on('error', (error) => {
+        console.error('Error reading file:', error);
+    });
+
+code:-SERVER WITH WRITE FILE
+
+    const fs = require('fs');
+    const data = 'Senior Software Engineer';
+    // Create a writable stream to write data into a file
+    const writeStream = fs.createWriteStream('input.txt', {
+    encoding: 'utf8'
+    });
+
+    // Write data to the file
+    writeStream.write(data);
+
+    // Close the stream
+    writeStream.end();
+
+    // Optional: handle stream events
+    writeStream.on('finish', () => {
+    console.log('Data written successfully');
+    });
+
+    writeStream.on('error', (err) => {
+    console.error('Error writing file:', err);
+    });
+
+Question 14) Stream-Piping ?
+    Piping is a mechanism where output of one stream is used as input to another stream. There is no limit on piping operation.
+
+code :-
+    var fs = require("fs");  
+    // Create a readable stream  
+    var readerStream = fs.createReadStream('input.txt');  
+    // Create a writable stream  
+    var writerStream = fs.createWriteStream('output.txt');  
+    // Pipe the read and write operations  
+    // read input.txt and write data to output.txt  
+    readerStream.pipe(writerStream);  
+    console.log("Program Ended");   
+
+Question 15)  what are api methods  and explain methods ?
+
+    Method	Purpose	Idempotent?	Use Case
+    GET	Fetch data	✅ Yes	Read data
+    POST	Create data	❌ No	Add new record
+    PUT	Replace entire resource	✅ Yes	Full update
+    PATCH	Modify part of resource	⚠️ Sometimes	Partial update
+
+Question 16)What is Buffer ?
+    A Buffer is a built-in Node.js object used to handle binary data directly in memory.
+    To work with files, images, videos, streams, TCP data
+    To handle network data and file system data
+    const buf = Buffer.from("Hello");
+    console.log(buf);          // <Buffer 48 65 6c 6c 6f>
+    console.log(buf.toString()); // Hello
+Real-time use:
+    When you upload a file or receive data from a socket, Node uses Buffer to process it efficiently without blocking.
+
+Question 17)What is Stub ?
+    A stub is a fake function or component used in testing that replaces a real dependency and returns predefined data.
+Why we use it:
+    To isolate the unit under test
+    To avoid calling real APIs, databases, or files
+    To make tests fast, reliable, and predictable
+
+code:-
+    Same Example Using a Stub (Testing)
+    // Stub function
+    function getUserStub() {
+    return {
+        id: 1,
+        name: "Ganesh",
+        role: "Admin"
+    };
+    }
+
+    // Function under test
+    function getUserName(getUser) {
+    const user = getUser();
+    return user.name;
+    }
+
+    // Test
+    console.log(getUserName(getUserStub)); // Ganesh
+
+
+Question 18) What is the Child Process module in Node.js? 
+     Explain its purpose and demonstrate its usage with code examples for spawn, exec, xecFile, and fork.?
+child_process :-
+    The child_process module in Node.js is a built-in module
+    that allows the main process to create separate child processes to execute tasks concurrently, 
+    there by preventing the main event loop from being blocked.
+
+Use & Purpose:-
+
+Handles CPU-intensive tasks such as file processing, data computation, and heavy I/O operations.
+Enables parallel execution to improve performance in Node.js applications.
+Prevents blocking of the main event loop, ensuring smooth and responsive applications.
+
+It provides methods like:
+spawn() :-
+
+    spawn() is a Node.js method used to create a new child process that executes a system command with optional arguments and returns a ChildProcess object to handle the process’s input and output streams.
+code  :-
+    const { spawn } = require("child_process");
+
+    // Detect the platform and choose the command
+    const command = process.platform === "win32" ? "dir" : "ls";
+    const args = process.platform === "win32" ? ["/b"] : ["-lh"];
+    // Spawn the process
+    const child = spawn(command, args, { shell: true }); // Use `shell: true` for Windows compatibility
+
+    child.stdout.on("data", (data) => {
+    console.log(`Output: ${data}`);
+    });
+
+    child.stderr.on("data", (data) => {
+    console.error(`Error: ${data}`);
+    });
+
+    child.on("close", (code) => {
+    console.log(`Child process exited with code ${code}`);
+    });
+
+    exec():-
+    exec() is a Node.js method used to execute a shell command, where the command runs in a shell and the complete output is buffered in memory and returned through a callback
+
+    code :-
+
+        const { exec } = require("child_process");
+
+        // Execute the 'ls' or 'dir' command based on the OS
+        const command = process.platform === "win32" ? "dir" : "ls -lh";
+
+        exec(command, (error, stdout, stderr) => {
+        if (error) {
+        console.error(`Error: ${error.message}`);
+        return;
+        }
+
+        if (stderr) {
+        console.error(`Standard Error: ${stderr}`);
+        return;
+        }
+
+        console.log(`Standard Output:\n${stdout}`);
+        });
+
+execFile():-
+    execFile() is a Node.js method used to execute an executable file directly without invoking a shell, making it more secure and efficient than exec().
+
+code :-
+    const { execFile } = require("child_process");
+
+    // Run the hello.js script using the Node.js executable
+    execFile("node", ["hello.js"], (error, stdout, stderr) => {
+    if (error) {
+        console.error(`Error: ${error.message}`);
+        return;
+    }
+
+    if (stderr) {
+        console.error(`Standard Error: ${stderr}`);
+        return;
+    }
+
+    console.log(`Standard Output:\n${stdout}`);
+    });
+
+fork():- 
+    Creating Node processes with fork():
+    The fork() method is a variation of spawn() used specifically for creating Node processes. 
+    It establishes a communication channel between the parent and the forked child process,
+    allowing them to exchange messages. Here’s a step-by-step guide on using fork():
+
+    code :
+    const { fork } = require("child_process");
+    const forked = fork("script.js");
+
+    // Parent process
+    forked.send("message");
+    forked.on("message", (message) => {
+    // Handle the message from the child process
+    });
+
+    // Child processs
+    process.send("message");
+    process.on("message", (message) => {
+    // Handle the message from the parent process
+    });
+
+
+    Question 19) What is Cluster ?
+
+    Cluster is a built-in Node.js module that allows you to create multiple worker processes that share the same server port, enabling Node.js to utilize multiple CPU cores.
+
+    Node.js runs on a single thread by default, which means it can use only one CPU core.
+    The cluster module helps:
+    Improve performance
+    Handle more concurrent requests
+    Use all available CPU cores
+
+
+    1) Cluster is in bult module in 
+    2) The Cluster module allows you to create multiple instances of your Node.js application,
+    3) Each running in a separate process.
+    3) These instances share the same port,
+    4) Allowing for efficient utilization of multiple CPU cores.
+    5) The cluster module simplifies the process of creating and managing multiple Node.js processes.
+    6) Load distribution across CPU cores. Typically, 
+    7) The master process manages the worker processes and distributes incoming connections among them.
+    code:-
+        const cluster = require('cluster');
+        const http = require('http');
+        const numCPUs = require('os').cpus().length;
+
+        if (cluster.isMaster) {
+        console.log(`Master ${process.pid} is running`);
+
+        // Fork workers.
+        for (let i = 0; i < numCPUs; i++) {
+        cluster.fork();
+        }
+
+        cluster.on('exit', (worker, code, signal) => {
+        console.log(`worker ${worker.process.pid} died`);
+        });
+        } else {
+        // Workers can share any TCP connection
+        // In this case it is an HTTP server
+        http.createServer((req, res) => {
+        res.writeHead(200);
+        res.end('hello world\n');
+        }).listen(8000);
+
+        console.log(`Worker ${process.pid} started`);
+
+    Question 20)What is timmmer function 
+                                proccess.nextTick
+                                setimmdiate()
+                                settimeout
+                                setinterval()
+    setTimeout/clearTimeout – Used to schedule code execution after a designated amount of milliseconds
+    setInterval/clearInterval – Used to execute a block of code multiple times
+    setImmediate() runs the callback in the next event loop iteration, after I/O events (in the "check" phase).
+    process.nextTick() runs the callback immediately after the current operation finishes, before the event loop continues (before I/O, timers).
+
+    Question 21) What is  Middleware ?
+    In general, middleware is a function receives the Request and Response objects.
+    In other words, in an application’s request-response cycle these functions have access to various request &  response objects 
+    along with the next function of the cycle.
+    The next function of middleware is represented with the help of a variable, usually named next.
+    Most commonly performed tasks by the middleware functions are:
+
+    Execute any type of code
+    Update or modify the request and the response objects
+    Finish the request-response cycle
+    Invoke the next middleware in the stack
+    code :-
+
+    const authenticateUser = (req, res, next) => {
+    if (!req.headers['authorization']) {
+        return res.status(401).send('Unauthorized');
+    }
+    next();
+    };
+
+
+
+
+Question 22) Types of Middleware in Express.js
+    There are 5 types of middleware in Express:
+    application-level,
+    router-level, 
+    built-in, 
+    third-party,
+    and error-handling middleware.”
+
+    Application-Level Middleware
+    ----------------------------
+
+    app.use((req, res, next) => {
+    console.log("Request received:", req.method, req.url);
+    next();
+    });
+
+    Router-Level Middleware
+    --------------------------
+    const router = express.Router();
+
+    router.use((req, res, next) => {
+    console.log("Router middleware");
+    next();
+    });
+
+
+    Built-in Middleware
+    --------------------
+    Express provides built-in middleware like:
+
+    express.json()
+    express.urlencoded()
+    express.static()
+
+
+
+    app.use(express.json());        // Parse JSON
+    app.use(express.urlencoded({ extended: true }));  // Parse form data
+    app.use(express.static('public'));  // Serve static files
+
+
+    Third-Party Middleware
+    -----------------------
+    Middleware installed from NPM.
+
+    const morgan = require('morgan');
+    app.use(morgan('dev')); // Logs API calls
+
+
+    Error-Handling Middleware
+    ---------------------------
+    Special middleware that handles errors
+    (MUST have 4 arguments → err, req, res, next).
+
+    ✔ Example
+    app.use((err, req, res, next) => {
+    console.error("Error:", err);
+    res.status(500).send("Something went wrong!");
+    });
+
+
+
+    function myLogger(req, res, next) {
+    console.log("Middleware executed");
+    next();
+    }
+
+    app.use(myLogger);
+
+    Question 23) What are the key features of Express.js?
+
+    Express is a minimal and flexible Node.js web application framework
+    that provides a robust set of features for web and mobile applications.
+    With a myriad of HTTP utility methods and middleware at your disposal, 
+    creating a robust API is quick and easy.
+    Makes Node.js web application development fast and easy.
+    Easy to configure and customize.
+
+    Allows you to define routes of your application based on HTTP methods and URLs.
+    Includes various middleware modules which you can use to perform additional tasks on request and response.
+    Easy to integrate with different template engines like Jade, Vash, EJS etc.
+    Allows you to define an error handling middleware.
+    Easy to serve static files and resources of your application.
+    Allows you to create REST API server.
+    Easy to connect with databases such as MongoDB, Redis, MySQL
+
+
+    Question 24)What is an error-first callback in Node.js?
+
+    Error-first callbacks in Node.js are used to pass errors and data.
+    The very first parameter you need to pass to these functions has to be an error object
+    while the other parameters represent the associated data. Thus you can pass the error object for checking if anything is wrong and handle it
+    . In case there is no issue, you can just go ahead and with the subsequent arguments.
+
+    Question 25)Explain libuv.?
+    Libuv is a multi-platform support library of Node.js which majorly is used for asynchronous I/O.
+    It was primarily developed for Node.js, 
+    with time it is popularly practiced with other systems like as Luvit, pyuv, Julia, etc. 
+    Libuv is basically an abstraction around libev/ IOCP depending on the platform,
+    providing users an API based on libev. A few of the important features of libuv are:
+
+    Full-featured event loop backed
+    File system events
+    Asynchronous file & file system operations
+    Asynchronous TCP & UDP sockets
+    Child processes
+
+    Question 26) What is the difference between Asynchronous and Non-blocking?
+    Asynchronous
+    Asynchronous means not synchronous. 
+    Using these we can make asynchronous HTTP requests that do not wait for the server to respond. 
+    These functions continue to respond to the request for which it has already received the server response.
+
+    Non-blocking
+
+    Non-blocking functions are used in regards with I/O operations. 
+    They immediately respond with whatever data is available and
+    keeps on running as per the request
+    s. In case, any answer couldn’t be retrieved then
+    the API returns immediately with an error.
+
+Question 27) what are the LTS realse ?
+    In Node.js, LTS (Long-Term Support) releases are the versions of Node.js
+    that are maintained for a longer period, receiving security updates, bug fixes, 
+    and critical updates. LTS releases ensure that developers and organizations can rely on stability and long-term maintenance.
+
+
+Question 28)How many types of status code in node js ?
+    Status Code	Meaning	Category
+    200 OK	Request was successful	Success (2xx)
+    201 Created	New resource has been created	Success (2xx)
+    204 No Content	Successful request, but no content returned	Success (2xx)
+    301 Moved Permanently	Resource permanently moved to a new URL	Redirection (3xx)
+    302 Found	Resource temporarily moved	Redirection (3xx)
+    400 Bad Request	Invalid syntax in the request	Client Error (4xx)
+    401 Unauthorized	Requires authentication	Client Error (4xx)
+    403 Forbidden	Server refuses to authorize the request	Client Error (4xx)
+    404 Not Found	Resource not found	Client Error (4xx)
+    405 Method Not Allowed	HTTP method not allowed for this resource	Client Error (4xx)
+    500 Internal Server Error	Server encountered an unexpected error	Server Error (5xx)
+    502 Bad Gateway	Invalid response from upstream server	Server Error (5xx)
+    503 Service Unavailable	Server temporarily unavailable	Server Error (5xx)
+    504 Gateway Timeout	Timeout while waiting for upstream server	Server Error (5xx)
+
+Question 29)How do you handle memory leaks in node js ?
+
+memory leaks:-
+
+A memory leak happens when unused memory is not released, 
+causing the application to consume more and more memory over time.
+
+Unused Variables & Global Objects:-
+Avoid unnecessary global variables
+Clear references when objects are no longer needed
+
+Unclosed Timers & Intervals:-
+
+Always clear setInterval and setTimeout
+
+Event Listeners Not Removed:-
+Remove listeners when not needed
+
+Large Objects in Memory:-
+
+Avoid loading large files fully into memory
+Use streams instead
+
+Closures Holding Memory:-
+
+Be careful with closures holding references to large objects
+
+>PM2 memory monitoring
+
+ Question 30)How do you optimze code and performance of node application?
+
+ 
+optimize code and improve performance in a Node.js application, you can follow these strategies:
+Asynchronous Programming: Leverage asynchronous operations using async/await, promises, and non-blocking I/O to improve concurrency and prevent blocking the event loop.
+
+Use Clustering: Utilize Node.js's cluster module to take advantage of multi-core systems by spawning worker processes to handle requests in parallel.
+
+Optimize Database Queries: Reduce the number of database queries and optimize them using indexing, caching, and limiting the data returned.
+Memory Management: Monitor and manage memory usage carefully by handling large objects, closing database connections, and removing unused event listeners to prevent memory leaks.
+Compression: Use middleware like compression to compress HTTP responses, reducing payload sizes and improving response times.
+Caching: Implement caching mechanisms like Redis to cache frequently accessed data and reduce database or API load.
+Profiling and Monitoring: Use tools like clinic.js or node --inspect to profile your code and identify bottlenecks in per
+formance.
+By applying these techniques, you can significantly enhance the speed and scalability of your Node.js application.
+
+
+Question 31)what is stack Tracing ?
+    Stack traces in Node.js are detailed reports generated when an error occurs in the application,
+    showing the sequence of function calls that led to the error. They provide insight into the error's origin,
+    helping developers debug and trace the flow of execution through the code.
+
+
+Question 32)  what are the feature of node pacakge manager ?
+
+    Features of Node Package Manager (NPM):
+    Dependency Management:
+    Automatically manages dependencies for a Node.js project. It allows you to install, update, and remove packages easily.
+
+    Global and Local Installation:
+
+    Local Installation: Installs packages specific to a project.
+    Global Installation: Installs packages system-wide for use across multiple projects.
+    Version Management:
+    Supports semantic versioning, allowing developers to specify compatible package versions to prevent breaking changes.
+
+    Package Publishing:
+    Enables developers to publish their own packages to the NPM registry, making them available for others to use.
+
+    Scripts and Automation:
+    Provides a way to define and run scripts (e.g., test, start, build) in the package.json file to automate tasks like testing or building the application.
+
+    Package Locking:
+    The package-lock.json file ensures consistent dependency versions across environments by locking specific versions.
+
+    Large Ecosystem:
+    Access to a vast collection of over a million open-source libraries and tools for various functionalities.
+
+    Registry and Search:
+    NPM provides a public registry and search functionality to find and explore packages for your projects.
+
+    Custom Configuration:
+    Allows configuring the behavior of NPM through .npmrc files, such as setting private registries, proxies, or custom scripts.
+
+Question 33)what is garbage collection?
+
+    Garbage Collection in Node.js:
+    Garbage collection is the process by which Node.js automatically frees up memory that is no longer in use.
+    The V8 engine manages this by identifying and removing objects that are no longer reachable or needed, ensuring efficient memory usage without manual intervention.
+
+    Key Points:
+    Managed by V8's garbage collector.
+
+
+Question 34) what is Refactor Pattern in Node.js ?
+    The refactor pattern in Node.js refers to the practice of restructuring existing code to improve its readability, 
+    maintainability, and performance without changing its external behavior. It involves breaking down complex modules,
+    functions, or classes into smaller, reusable components while adhering to clean code principles.
+
+Question 35) what is single Thread and Multi Threading ?
+
+    Single thread means one task is executed at a time in a single main thread.
+    Multithreading means multiple tasks run in parallel using multiple threads.
+
+Question 36)why node js single thread?
+
+    the event loop runs one process at a time. That means it can only execute one function at a time, and 
+    since functions can have multiple instructions,
+    the event loop will execute one instruction at a time.
+
+Question 36)How its works in node js?
+    Node.js supports multi-threading using Worker Threads and the Cluster module.
+    The Cluster module creates multiple processes to handle requests in parallel.
+    The Worker Threads module runs CPU-intensive tasks in separate threads inside a single process.
+    This improves performance for CPU-heavy operations like image processing or computations
+
+Question 37)What is REST API ?
+
+`REST API stands for Representational State Transfer Application Programming Interface.
+A REST API is a way for client and server to communicate using HTTP methods
+like GET, POST, PUT, and DELETE. It is stateless, follows simple rules, 
+and usually exchanges data in JSON format.”
+
+REST API stands for Representational State Transfer Application Programming Interface.
+REST is lightweight and flexible, SOAP is heavy and strict.`
+
+stateless:-
+The server does NOT remember anything about the client between requests.
+Each request is independent and must contain all required information.
+
+Question 38)What is Load Balancing (in Node.js)?
+    Load balancing is the process of distributing incoming requests across multiple Node.js instances so that:
+    No single server is overloaded
+    The app stays fast
+    The system remains available even if one instance fails
+👉 Node.js is single-threaded → load balancing is essential.
+    Why Load Balancing is Needed in Node.js
+    One Node process = one CPU core
+    High traffic can block requests
+    Crashes should not bring the app down
