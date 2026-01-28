@@ -1,0 +1,494 @@
+Question 1) What is React?
+    React is a JavaScript library for building component-based, reusable, and high-performance user interfaces using a virtual DOM.
+
+Question 2) What is JSX?
+    JSX allows writing HTML inside JavaScript and gets converted into React.createElement().
+
+Question 3) what is Virtual DOM ?
+    The Virtual DOM is a lightweight copy of the real DOM.
+    React updates the Virtual DOM first compares it with the previous version,
+    and then updates only the changed parts in the real DOM, which makes the UI faster.
+    Instead of updating the entire webpage, React finds what exactly changed and updates only that part.
+
+Question 4) what is Real DOM  ?
+    The Real DOM is the actual browser DOM that directly represents the UI on the web page.
+    Any change in the Real DOM causes the browser to re-render the affected part of the page.
+
+
+Question 5)What is difference between Virtual DOM  &&  Real DOM?
+
+    | Feature          | Real DOM                  | Virtual DOM        |
+    | ---------------- | ------------------------- | ------------------ |
+    | Update method    | Direct update             | Batched update     |
+    | Performance      | Slow for frequent updates | Fast               |
+    | Re-render        | Entire UI affected        | Only changed nodes |
+    | DOM manipulation | Heavy                     | Minimal            |
+
+Question 5) Why React is fast?
+    React is fast because it uses a Virtual DOM.
+    Instead of updating the real DOM directly, React:
+    Creates a virtual copy
+    Compares changes (diffing)
+    Updates only the changed parts (reconciliation)
+
+Question 6)What is a component?
+    A component is a reusable piece of UI.
+    In React, everything is built using components.
+
+Question 7)What is Class component?
+
+class Counter extends React.Component {
+  state = { count: 0 };
+
+  increment = () => {
+    this.setState({ count: this.state.count + 1 });
+  };
+
+  render() {
+    return <button onClick={this.increment}>{this.state.count}</button>;
+  }
+}
+Uses class syntax
+Uses this.state and this.setState()
+Lifecycle methods (componentDidMount, etc.)
+More boilerplate
+Harder to reuse logic
+
+
+
+Question 8)What is functional component?
+
+    A functional component is a plain JavaScript function that returns JSX and
+    uses React Hooks to manage state and lifecycle behavior.
+
+    function Counter() {
+    const [count, setCount] = React.useState(0);
+
+    return <button onClick={() => setCount(count + 1)}>{count}</button>;
+    }
+    Functional Component:-
+    Uses function syntax
+    Uses Hooks (useState, useEffect)
+    Less code, cleaner syntax
+    Better performance & readability
+    Easy logic reuse with custom hooks
+
+Question 9) What are props?
+    Props are read-only data passed from parent to child components.
+    function User({ name }) {
+    return <h2>{name}</h2>;
+    }
+
+Question 10) What is state?
+State is a mutable object that holds data which can change over time and affects the UI.
+
+Question 11) What are hooks?
+Hooks are functions that allow using React features like state and lifecycle in functional components.
+
+
+Question 12)What is useEffect Hook?
+useEffect is a React Hook used to handle side effects in functional components, such as API calls, subscriptions, timers, and DOM updates.
+useEffect runs code after the component renders.
+import React from 'react';
+import { useState,useEffect } from 'react'
+
+function App() {
+ 
+ const [users,setUsers]= useState([])
+ 
+   useEffect(()=>{
+      fetch("https://jsonplaceholder.typicode.com/users")
+        .then(res => res.json())
+     .then(data=>setUsers(data))
+     
+   },[])
+   console.log(users)
+
+  return(
+    
+    
+    <div>
+      
+      {users.map((item)=>(
+      
+      <li key={item.id}>
+      {item.name} ({item.email})
+    </li>
+      ))}
+      
+    </div>
+    )
+}
+
+export default App
+
+Question 12)What is useState Hook?
+
+useState is a React Hook used to create and manage state in functional components.
+
+Question 13)What is useContext Hook?
+    suseContext is a React Hook that allows us to share data globally between components without prop drilling.
+    useContext helps pass data directly to any component without sending props step by step.
+Step 1: Create Context
+----------------------
+
+import { createContext } from "react";
+
+export const UserContext = createContext(null);
+
+Step 2: Provide Context (Top Level)
+---------------------------------
+import { useState } from "react";
+import { UserContext } from "./UserContext";
+import Dashboard from "./Dashboard";
+
+function App() {
+  const [user, setUser] = useState({
+    name: "Ganesh",
+    role: "Admin"
+  });
+
+  return (
+    <UserContext.Provider value={user}>
+      <Dashboard />
+    </UserContext.Provider>
+  );
+}
+
+export default App;
+
+
+import { useContext } from "react";
+import { UserContext } from "./UserContext";
+
+function Dashboard() {
+  const user = useContext(UserContext);
+
+  return <h2>Welcome {user.name} ({user.role})</h2>;
+}
+How It Works
+----------
+Context is created using createContext
+Provider supplies the data
+useContext reads the data directly
+No prop drilling
+Component re-renders when context value changes
+
+
+Question 14)What is useMemo?Real time example?
+useMemo is a React Hook used to memorize (cache) the result of an expensive calculation so it does not re-calculate on every render.
+useMemo improves performance by avoiding unnecessary calculations.
+
+
+React:
+
+State change → component re-renders
+Re-render → all functions run again
+If a heavy calculation runs on every render → performance issue
+👉 useMemo solves this.
+
+import { useMemo, useState } from "react";
+
+function UserList({ users }) {
+  const [search, setSearch] = useState("");
+
+  const filteredUsers = useMemo(() => {
+    console.log("Filtering users...");
+    return users.filter(user =>
+      user.name.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [search, users]);
+
+  return (
+    <>
+      <input
+        placeholder="Search user"
+        onChange={e => setSearch(e.target.value)}
+      />
+      <ul>
+        {filteredUsers.map(user => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ul>
+    </>
+  );
+}
+
+
+
+Without useMemo → filtering runs on every render
+With useMemo → runs only when search or users change
+Improves performance for large datasets
+
+Question 15)What is useCallback?
+
+useCallback is a React Hook used to memoize a function, so that the same function reference is reused between renders unless its dependencies change.
+
+In simple words:
+useCallback prevents unnecessary function re-creation.
+
+In React:-
+Components re-render → functions are re-created
+New function reference → child component re-renders
+This causes performance issues
+👉 useCallback solves this by caching the function.
+
+
+const Child = React.memo(({ onClick }) => {
+  console.log("Child rendered");
+  return <button onClick={onClick}>Click Me</button>;
+});
+
+function Parent() {
+  const [count, setCount] = React.useState(0);
+
+  const handleClick = React.useCallback(() => {
+    console.log("Button clicked");
+  }, []);
+
+  return (
+    <>
+      <button onClick={() => setCount(count + 1)}>
+        Parent Count: {count}
+      </button>
+      <Child onClick={handleClick} />
+    </>
+  );
+}
+
+
+const Child = React.memo(({ onClick }) => {
+  console.log("Child rendered");
+  return <button onClick={onClick}>Click Me</button>;
+});
+
+function Parent() {
+  const [count, setCount] = React.useState(0);
+
+  const handleClick = React.useCallback(() => {
+    console.log("Button clicked");
+  }, []);
+
+  return (
+    <>
+      <button onClick={() => setCount(count + 1)}>
+        Parent Count: {count}
+      </button>
+      <Child onClick={handleClick} />
+    </>
+  );
+}
+Question 16)Why keys are important?
+
+Answer:
+Keys help React identify which items changed, added, or removed.
+They improve rendering performance.
+
+items.map(item => <li key={item.id}>{item.name}</li>)
+
+Question 17)What is Context API?
+
+Answer:
+Context API is used to avoid prop drilling and share global data like:
+Auth user
+Theme
+Language
+
+Question 18)What is React Router?
+
+Answer:
+React Router is used for client-side routing in single-page applications.
+
+<Route path="/login" element={<Login />} />
+
+Question 19)What is React.lazy?
+
+Component is loaded only when needed
+Reduces initial bundle size
+
+import React, { lazy, Suspense } from 'react';
+
+const Dashboard = lazy(() => import('./Dashboard'));
+
+function App() {
+  return (
+    <Suspense fallback={<div>Loading Dashboard...</div>}>
+      <Dashboard />
+    </Suspense>
+  );
+}
+
+export default App;
+
+Question 19)What is Redux?
+  Redux is a state management library often used with React.
+  It helps in managing the application state in a predictable way by centralizing the state in a single store, 
+  enabling easy debugging and testing.
+
+  Redux Data Flow (Old Way)
+  Component → Action → Reducer → Store → Component
+🔹 Core Concepts (Must Know for Interview)
+  Store:-
+  Holds the entire app state
+  Only one store in a Redux app
+
+  Action :-
+  A plain JavaScript object
+  Describes what happened
+  Must have a type
+
+  Reducer:-
+  A pure function
+  Takes state and action
+  Returns new state
+
+  Dispatch:-
+  Used to send actions to the store
+
+  Why redux-thunk:-
+  Redux is synchronous
+  API calls are async
+
+redux-thunk allows functions inside dispatch
+
+  📁 actions/types.js
+
+  export const FETCH_USERS_REQUEST = "FETCH_USERS_REQUEST";
+  export const FETCH_USERS_SUCCESS = "FETCH_USERS_SUCCESS";
+  export const FETCH_USERS_FAILURE = "FETCH_USERS_FAILURE";
+
+📁 actions/userActions.js
+
+import {
+  FETCH_USERS_REQUEST,
+  FETCH_USERS_SUCCESS,
+  FETCH_USERS_FAILURE
+} from "./types";
+
+export const fetchUsers = () => {
+  return async (dispatch) => {
+    dispatch({ type: FETCH_USERS_REQUEST });
+
+    try {
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/users"
+      );
+      const data = await response.json();
+
+      dispatch({
+        type: FETCH_USERS_SUCCESS,
+        payload: data
+      });
+    } catch (error) {
+      dispatch({
+        type: FETCH_USERS_FAILURE,
+        payload: error.message
+      });
+    }
+  };
+};
+
+
+reducers/userReducer.js
+
+import {
+  FETCH_USERS_REQUEST,
+  FETCH_USERS_SUCCESS,
+  FETCH_USERS_FAILURE
+} from "../actions/types";
+
+const initialState = {
+  loading: false,
+  users: [],
+  error: ""
+};
+
+const userReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case FETCH_USERS_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+
+    case FETCH_USERS_SUCCESS:
+      return {
+        loading: false,
+        users: action.payload,
+        error: ""
+      };
+
+    case FETCH_USERS_FAILURE:
+      return {
+        loading: false,
+        users: [],
+        error: action.payload
+      };
+
+    default:
+      return state;
+  }
+};
+
+export default userReducer;
+
+Root Reducer
+
+📁 reducers/index.js
+
+import { combineReducers } from "redux";
+import userReducer from "./userReducer";
+
+const rootReducer = combineReducers({
+  usersData: userReducer
+});
+
+export default rootReducer;
+
+
+Provide Store to React App
+
+📁 index.js
+
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import App from "./App";
+import store from "./store";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
+
+Component Usage (Old Way Hooks)
+
+📁 Users.js
+
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUsers } from "./actions/userActions";
+
+const Users = () => {
+  const dispatch = useDispatch();
+  const usersState = useSelector(state => state.usersData);
+
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch]);
+
+  if (usersState.loading) return <h3>Loading...</h3>;
+  if (usersState.error) return <h3>{usersState.error}</h3>;
+
+  return (
+    <ul>
+      {usersState.users.map(user => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
+  );
+};
+
+export default Users;

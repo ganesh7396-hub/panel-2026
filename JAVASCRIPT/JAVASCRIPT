@@ -978,7 +978,6 @@ greetJohn();
  Question 15) What is  Closure with example ?
 
 A closures is the combination of functions bundle together with reference to its  state
- (the lexical)
 environment A clousures gives  access to outer function scope  from an inner function 
 in javscript closure are created every time  a function is created at function each time
 
@@ -1113,6 +1112,7 @@ Fetch does not reject promises for 404/500 errors — you must check response.ok
 Harder to handle global headers (like auth tokens) or logging.
 5.Basic features only
 No built-in support for request cancellation, timeouts, or automatic retries.
+
 Axios (Third-Party Library) :-
 External library
 1.Needs installation using

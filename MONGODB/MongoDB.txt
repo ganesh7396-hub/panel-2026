@@ -1,0 +1,540 @@
+Question 1)What is MongoDB?
+
+MongoDB is an open-source document-oriented NoSQL database
+MongoDB is based on collections and JSON-like documents instead of databases
+
+Question 2)What is document ?
+A document in MongoDB is a JSON-like data structure that stores information as key-value pairs and is the basic unit of data in a collection.
+
+Question 3) What is BSON ?
+    Documents are stored in BSON (Binary JSON) format,
+    which supports rich data types like arrays, nested documents, and binary data.
+    BSON is optimized for speed and flexibility.
+
+Question 4)What are the advantages of MongoDB ?
+    Schema Less: objects in the same collection can have different structures and different sets of fields.
+    But if a schema is needed, we can always define our schema in the code.
+    High performance: MongoDB stores data in the RAM, allowing faster performance while executing queries.
+    High availability: MongoDB supports features like data sharding and replication (replica sets).
+    Easy scalability: MongoDB supports easy horizontal scaling through sharding (distrusting data across multiple servers).
+    Cost-effective: in the cloud-based MongoDB Atlas, we can adjust the cluster to automatically scale when needed.
+    Rich query language: Mongodb provides easy aggregation, and no more complex joins. It also Supports Ad Hoc queries
+    Indexing − any field in MongoDB can be indexed; we can also create compound indexes.
+
+Question 5)What is Aggregation in MongoDB ?
+    Aggregation is the process of transforming, filtering, grouping, and analyzing data from one or more documents to produce computed results.
+    Aggregations operations process data records and return computed results.
+    Aggregation operations group values from multiple documents together,
+    and can perform a variety of operations on the grouped data to return a single result. 
+
+Question 6)Why do we use Aggregation?
+    To group data
+    To calculate totals / averages
+    To filter large datasets
+    To create reports & analytics
+    To reshape documents
+
+Question 7)What is diffferent types of Aggregation in MongoDB ?
+    MongoDB provides three ways to perform aggregation:
+    Aggregation Pipeline:-
+    This is the most powerful and commonly used aggregation method.
+   Data passes through multiple stages, where each stage processes the output of the previous one.
+   query :
+    db.orders.aggregate([
+    { $match: { status: "completed" } },
+    { $group: { _id: "$userId", totalAmount: { $sum: "$amount" } } },
+    { $sort: { totalAmount: -1 } }
+    ])
+
+    Single Purpose Aggregation Methods:-
+    These are simple and faster for basic operations.
+        db.users.countDocuments({ isActive: true })
+        db.orders.distinct("userId")
+
+    Map-Reduce Aggregation (⚠️ Rarely Used Now) :-
+    Uses JavaScript functions to process data.
+    query:
+    Map-Reduce Aggregation (⚠️ Rarely Used Now)
+    Uses JavaScript functions to process data.
+
+
+Question 8)What is Sharding in MongoDB? Explain.
+    Answer: Sharding is a method for storing data across multiple machines. 
+    MongoDB uses sharding to support deployments with very large data sets and high throughput operations.
+
+Question 9)What is a replica set in Mongodb?
+    A replica set in Mongodb in a grooup of mongodb server thats store the same data to provide redundancy and high availbility
+
+Question 10)What is an Index in MongoDB?
+    An Index in MongoDB is a data structure that improves the speed of data retrieval operations on a collection.
+
+    👉 Without an index, MongoDB performs a collection scan (checks every document).
+    👉 With an index, MongoDB uses a B-Tree index to quickly locate data.
+    Why do we need Indexes?
+        Improve query performance
+        Speed up search, sort, and filter operations
+        Optimize large datasets
+        Reduce CPU and disk usage
+
+MongoDB supports multiple types of indexes, mainly:
+    Single Field Index:-A Single Field Index is created on one field of a document.
+    db.users.createIndex({ email: 1 })
+
+    Compound Index:-A Compound Index is created on multiple fields in a specific order.
+    db.orders.createIndex({ userId: 1, createdAt: -1 })
+
+    Multikey Index:-A Multikey Index is automatically created when indexing an array field.
+    db.users.createIndex({ skills: 1 })
+        {
+        "name": "Ganesh",
+        "skills": ["Node.js", "React", "MongoDB"]
+        }
+        >📌 Use case: Search inside arrays.
+    Text Index:-A Text Index is used for full-text search on string content.
+        db.posts.createIndex({ title: "text", description: "text" })
+        db.posts.find({ $text: { $search: "mongodb tutorial" } })
+   
+    Geospatial Index:-
+    A Geospatial Index is used to query location-based data.
+    db.places.createIndex({ location: "2dsphere" })
+    {
+    "name": "Cafe",
+    "location": {
+        "type": "Point",
+        "coordinates": [77.5946, 12.9716]
+    }
+    }
+
+    Hashed Index:-A Hashed Index indexes the hash value of a field.
+    db.users.createIndex({ userId: "hashed" })
+    Use case: Sharding & equality queries.
+    📌 Limitation: Cannot support range queries.
+    Unique Index:-A Unique Index ensures no duplicate values in a field.
+    db.users.createIndex({ email: 1 }, { unique: true })
+    📌 Use case: Email, username, phone number.
+
+     TTL (Time to Live):-Index: Expire documents after a set period
+    // Add a "createdAt" field to documents with the current date
+    db.sessions.insertOne({ sessionId: "abc123", createdAt: new Date() });
+    // Create a TTL index to expire documents 1 hour (3600 seconds) after "createdAt"
+    db.sessions.createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 });
+
+Question 11)What is $lookup in MongoDB?
+    $lookup is an aggregation stage that lets you join documents from one collection with documents from another collection 
+    based on a specified condition. This allows MongoDB to simulate relational database joins.
+
+    db.users.aggregate([
+    {
+        $lookup: {
+        from: "cities",            // Join with the cities collection
+        localField: "cityId",      // Field in the users collection
+        foreignField: "_id",       // Field in the cities collection
+        as: "cityDetails"          // Store matched cities in an array
+        }
+    }
+    ]);
+    Result:
+    javascript
+    Copy code
+    [
+    {
+        _id: 1,
+        name: "Alice",
+        cityId: 101,
+        cityDetails: [
+        { _id: 101, cityName: "New York" }
+        ]
+    },
+    {
+        _id: 2,
+        name: "Bob",
+        cityId: 102,
+        cityDetails: [
+        { _id: 102, cityName: "Los Angeles" }
+        ]
+    }
+
+
+
+Question 12)Explain what is GridFS in MongoDB?
+    For storing and retrieving large files such as images, video files and audio files GridFS is used.
+    By default, it uses two files fs.files and fs.chunks to store the file’s metadata and the chunks.
+
+
+Question 13)What is the role of profiler in MongoDB?
+
+The role of the profiler in MongoDB is to monitor and record database operations, such as queries and updates, 
+in order to analyze performance and identify potential optimization opportunities
+
+
+$match is used to filter documents based on specified criteria.
+It works similar to the find() method but operates within the aggregation pipeline.
+It allows you to select only the documents that match the specified conditions.
+Example: { $match: { field: value } }
+$group:
+
+$group is used to group documents by a specified key and perform aggregate operations.
+It allows you to calculate aggregate values like counts, sums, averages, and more.
+Example: { $group: { _id: "$category", totalSales: { $sum: "$sales" } } }
+$project:
+
+$project is used to reshape documents by including, excluding, or renaming fields.
+It allows you to specify the fields you want to include or exclude in the output.
+Example: { $project: { _id: 0, fullName: { $concat: ["$firstName", " ", "$lastName"] } } }
+$sort:
+
+$sort is used to sort documents based on one or more fields.
+It allows you to specify the sorting order (ascending or descending).
+Example: { $sort: { field: 1 } } (ascending) or { $sort: { field: -1 } } (descending)
+$ limit:
+
+$ limit is used to limit the number of documents returned in the result set.
+It restricts the number of documents passed to the next stage in the pipeline.
+Example: { $limit: 10 } (limits to 10 documents)
+
+$lookup:
+
+$lookup performs a left outer join to another collection in the same database.
+It allows you to combine documents from multiple collections into a single result set.
+Example: { $lookup: { from: "orders", localField: "userId", foreignField: "_id", as: "userOrders" } }
+$unwind:
+
+$unwind is used to deconstruct an array field from the input documents.
+It produces a separate document for each element in the array.
+
+Example: { $unwind: "$tags" } (where tags is an array field)
+
+These pipeline stages can be combined and chained together to perform complex data transformation and analysis operations in MongoDB.
+They provide a powerful and flexible way to process data and generate meaningful insights from your collections.
+
+$match:
+-------
+Book.aggregate([
+    { $match: { genre: 'Mystery' } }
+]).exec((err, result) => {
+    if (err) {
+        console.error('Error:', err);
+    } else {
+        console.log('Match Result:', result);
+    }
+});
+
+$group:
+-------
+Book.aggregate([
+    { 
+        $group: {
+            _id: '$author',
+            totalBooks: { $sum: 1 }
+        }
+    }
+]).exec((err, result) => {
+    if (err) {
+        console.error('Error:', err);
+    } else {
+        console.log('Group Result:', result);
+    }
+});
+
+$project:
+----------
+Book.aggregate([
+    { 
+        $project: { 
+            title: 1,
+            author: 1,
+            price: 1,
+            _id: 0
+        }
+    }
+]).exec((err, result) => {
+    if (err) {
+        console.error('Error:', err);
+    } else {
+        console.log('Project Result:', result);
+    }
+});
+
+$sort:
+-------
+Book.aggregate([
+    { $sort: { price: -1 } }
+]).exec((err, result) => {
+    if (err) {
+        console.error('Error:', err);
+    } else {
+        console.log('Sort Result:', result);
+    }
+});
+
+$limit:
+------
+
+Book.aggregate([
+    { $limit: 10 }
+]).exec((err, result) => {
+    if (err) {
+        console.error('Error:', err);
+    } else {
+        console.log('Limit Result:', result);
+    }
+});
+
+$lookup:
+-------
+Book.aggregate([
+    { 
+        $lookup: { 
+            from: 'authors',
+            localField: 'authorId',
+            foreignField: '_id',
+            as: 'authorInfo'
+        } 
+    }
+]).exec((err, result) => {
+    if (err) {
+        console.error('Error:', err);
+    } else {
+        console.log('Lookup Result:', result);
+    }
+});
+$unwind:
+----------
+Book.aggregate([
+    { $unwind: '$tags' }
+]).exec((err, result) => {
+    if (err) {
+        console.error('Error:', err);
+    } else {
+        console.log('Unwind Result:', result);
+    }
+});
+
+$each: Modifies the $push and $addToSet operators to append multiple items to an array field.
+$slice: Limits the number of array elements.
+$sort: Orders the elements of an array.
+$position: Specifies the position in an array to insert elements.
+$bit: Performs bitwise AND, OR, and XOR updates.
+
+
+Task - Aggreation with unwind :
+-----------------------------
+
+// Perform aggregation using $lookup
+Post.aggregate([
+    {
+        $lookup: {
+            from: 'users', // Target collection name
+            localField: 'userId', // Field in the Post collection
+            foreignField: '_id', // Field in the User collection
+            as: 'author' // Output field name
+        }
+    },
+    {
+        $unwind: '$author' // Unwind the array field
+    }
+])
+.exec((err, postsWithAuthors) => {
+    if (err) {
+        console.error('Error:', err);
+    } else {
+        console.log('Posts with Authors:', postsWithAuthors);
+    }
+});
+
+
+
+
+
+Task -Aggregation pipeline
+--------------------------
+Order.aggregate([
+    {
+        $group: {
+            _id: '$customerId', // Group by customerId
+            totalSales: { $sum: '$amount' } // Calculate total sales for each customer
+        }
+    },
+    {
+        $match: {
+            totalSales: { $gte: 1000 } // Filter customers with total sales greater than or equal to 1000
+        }
+    }
+])
+.exec((err, customersWithTotalSales) => {
+    if (err) {
+        console.error('Error:', err);
+    } else {
+        console.log('Customers with Total Sales:', customersWithTotalSales);
+    }
+});
+
+
+const mongoose = require('mongoose');
+
+// Connection URI
+const uri = 'mongodb://localhost:27017/mydatabase';
+
+// Options for the connection
+const options = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+};
+
+
+Mongodb connection
+------------------
+
+mongoose.connect(uri, options, (error) => {
+  if (error) {
+    console.error('Error connecting to MongoDB:', error);
+  } else {
+    console.log('Connected to MongoDB');
+    // Start using your Mongoose models and perform database operations
+  }
+});
+
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const DB_URL = process.env.DB_URL;
+
+module.exports = {
+	connectDB: async () => {
+		try {
+			mongoose.set('strictQuery', true);
+			await mongoose.connect(DB_URL);
+			console.log("DB connected successfully");
+		} catch (err) {
+			console.log("Error in DB connection: ", err);
+		}
+	},
+	close: () => {
+		mongoose.connection.close();
+		console.log("DB is closed successfully");
+	},
+};
+
+ 
+
+
+
+
+Task - Highest salary:
+---------------
+[
+  {
+    "salary": 1000
+  },
+  {
+    "salary": 20000
+  }
+]
+
+User.aggregate([
+
+    {$group:{
+
+        _id:null,
+        "maxsalary":{
+            $max:"$salary"
+        }
+    }}
+])
+
+
+Task -Highest second salary:
+---------------------
+
+
+db.collection.aggregate([
+  {
+    $sort: {
+      salary: -1
+    }
+  },
+  // Sort by salary in descending order
+  {
+    $skip: 1
+  },
+  // Skip the first highest salary
+  {
+    $limit: 1
+  }// Take only one record, which will be the second highest
+  
+])
+
+Task -less salary :
+-----------------
+
+db.collection.aggregate([
+  {
+    "$group": {
+      "_id": null,
+      "Minsalary": {
+        $min: "$salary"
+      }
+    }
+  }
+])
+
+Task -Search on name  
+---------------------
+Regular Expression :
+
+
+db.collection.find({
+  username: {
+    "$regex": "gan",
+    "$option": "i"
+  }
+})
+
+
+db.collection.find({ $text: { $search: "your_search_query" } })
+
+Q. What is ACID in MongoDB  ?
+
+ACID stands for Atomicity, Consistency, Isolation, and Durability, and it is a set of properties that ensure reliable processing of database transactions.
+MongoDB fully supports ACID transactions starting with version 4.0 for replica sets and version 4.2 for sharded clusters.
+
+Example:
+
+const session = await db.startSession();
+
+try {
+    session.startTransaction();
+
+    // Deduct from Account A
+    await db.collection('accounts').updateOne(
+        { name: "Account A" },
+        { $inc: { balance: -500 } },
+        { session }
+    );
+
+    // Add to Account B
+    await db.collection('accounts').updateOne(
+        { name: "Account B" },
+        { $inc: { balance: 500 } },
+        { session }
+    );
+
+    await session.commitTransaction();
+} catch (error) {
+    await session.abortTransaction();
+    console.error("Transaction aborted due to error: ", error);
+} finally {
+    session.endSession();
+}
+
+What is Replication?
+Replication means copying the same data to multiple servers to ensure high availability and fault tolerance.
+
+Primary → Handles all writes
+Secondary → Copies data from primary (read-only)
+Arbiter (optional) → Votes in elections (no data)
+
+What is Sharding?
+Sharding is horizontal data partitioning—splitting large data across multiple servers to handle huge datasets and high traffic.
+Shard → Stores part of data (each shard is a replica set)
+Config Server → Stores metadata
+mongos → Query router
