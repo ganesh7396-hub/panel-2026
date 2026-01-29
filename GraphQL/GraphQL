@@ -1,0 +1,249 @@
+Question 1)What is GraphQL?
+    GraphQL is a query language for APIs that allows clients to request specific data from the server. 
+    It provides flexibility and efficiency compared to traditional REST APIs.
+
+Question 2)What are Advantages of GraphQL?
+    1.Exact Data Fetching (No Over-fetching)
+    Client asks only what it needs
+    Improves performance
+
+    2.Single Endpoint
+    REST → multiple endpoints
+    /users, /users/:id, /users/:id/posts
+    GraphQL → one endpoint
+
+    3.Reduced Network Calls
+    Fetch related data in one request
+
+    4.Strongly Typed Schema
+    Every field has a type
+    Errors are caught early
+    Excellent developer experience
+
+    5. Frontend-Friendly (Best for React / Mobile)
+    Frontend controls the data
+    No backend changes needed for UI update
+
+    6. Easy Versioning
+    No need for /v1, /v2
+    Add new fields without breaking existing clients
+
+    7. Better Documentation & Tooling
+        Auto-generated docs
+        Tools like:
+        GraphiQL
+        Apollo Studio
+        Postman GraphQL
+    8. Works Well with Microservices
+    Acts as an API gateway
+    Combines data from multiple services
+
+Question 2)What are Disadvantages of GraphQL?
+    GraphQL adds complexity on the backend due to schema and resolver management.
+    Performance Risk with Complex Queries
+    Clients can request deeply nested queries May cause:Slow responses
+    GraphQL caching is more complex compared to REST’s native HTTP caching.
+    Error Handling Is Less Straightforward
+    Always returns 200 OK
+    Errors come inside the response body
+    {
+        "data": null,
+        "errors": [
+            { "message": "Unauthorized" }
+        ]
+    }
+
+    Steeper Learning Curve
+    Developers must understand:-
+    Schema
+    Types
+    Resolvers
+    Query language
+
+Question 3) When to Choose GraphQL?
+    Choose GraphQL when clients need flexible data, multiple consumers (web/mobile), and efficient network usage. Choose REST when APIs are simple, cache-heavy, or public
+
+Question 4) What is Schema? 
+    Defines the structure of the API.
+    Specifies the types, queries, and mutations
+
+    schema {
+    query: Query
+    mutation: Mutation
+    }
+
+    
+    type User {
+    id: ID!
+    name: String!
+    email: String!
+    age: Int
+    }
+
+    type Query {
+    getUser(id: ID!): User
+    }
+
+
+type Mutation {
+  createUser(
+    name: String!
+    email: String!
+    age: Int
+  ): User
+}
+
+mutation {
+  createUser(
+    name: "Ganesh"
+    email: "ganesh@gmail.com"
+    age: 30
+  ) {
+    id
+    name
+    email
+  }
+}
+
+
+query {
+  getUser(id: "1") {
+    id
+    name
+    email
+    age
+  }
+}
+
+
+Question 5) What is Resolvers? 
+A resolver is a function that tells GraphQL how to fetch or modify data for a specific field in the schema.
+
+code:
+
+@Resolver(() => User)
+export class UserResolver {
+  constructor(private readonly userService: UserService) {}
+
+  // QUERY
+  @Query(() => User, { name: 'getUser' })
+  getUser(@Args('id') id: string): User {
+    return this.userService.getUserById(id);
+  }
+
+  // MUTATION
+  @Mutation(() => User)
+  createUser(
+    @Args('input') input: CreateUserInput,
+  ): User {
+    return this.userService.createUser(
+      input.name,
+      input.email,
+    );
+  }
+}
+
+
+Question 6)What is Queries & Mutations?
+Used to fetch data from the server.
+Example: query { user(id: 1) { name, email } }
+
+Used to modify data on the server (create, update, delete).
+Example: mutation { addUser(name: "Alice", email: "alice@example.com") { id, name } }
+
+Question 7)Different Types in GraphQL ?
+    GraphQL provides built-in and custom types to clearly define what kind of data an API can send or receive
+    Scalar types represent single values.
+    Common scalar types:
+    Int → Integer
+    Float → Decimal
+    String → Text
+    Boolean → true / false
+    ID → Unique identifier
+
+Question 8)What is  GraphQL Subscription ?
+GraphQL Subscription enables real-time communication where the client listens for data changes from the server.
+GraphQL Subscription enables real-time communication where the client listens for data changes from the server.
+It allows the server to push data to the client automatically whenever something changes.
+
+👉 Unlike Query (read once) and Mutation (write once),
+👉 Subscription listens continuously for changes.
+
+Question 9)How can I handle the error in Graphql?
+
+In GraphQL, errors are handled by returning them in a dedicated errors field in the response, while still following a standard response structure.
+
+GraphQL always returns HTTP 200
+Actual errors are sent inside the errors array
+Successful data (if any) is returned in the data field
+
+Throw errors in resolvers
+--------------------------------
+if (!user) {
+  throw new Error("User not found");
+}
+
+Use custom error codes (Best Practice)
+-----------------------------------
+throw new GraphQLError("Unauthorized", {
+  extensions: { code: "UNAUTHORIZED" }
+});
+
+Question 10)How do you handle pagination in GraphQL?
+Pagination in GraphQL is a technique used to fetch large datasets in smaller chunks to improve performance and reduce network load.
+
+Unlike REST (page & limit URLs), GraphQL pagination is query-based and typically done in two ways:
+
+Offset-based pagination
+
+type Query {
+  users(limit: Int, offset: Int): [User]
+}
+
+query {
+  users(limit: 10, offset: 0) {
+    id
+    name
+  }
+}
+
+Cursor-Based Pagination (Best Practice)
+-------------------------------------
+Uses a cursor (unique pointer) instead of offset.
+
+type Query {
+  users(first: Int, after: String): UserConnection
+}
+
+query {
+  users(first: 10, after: "cursor123") {
+    edges {
+      node {
+        id
+        name
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+Question 11) What are the  Common GraphQL Tools?
+
+Apollo Server
+-------------
+Used to build and run GraphQL APIs.
+Schema & resolver support
+Built-in error handling
+Easy integration with NestJS / Express
+👉 Most commonly used GraphQL server
+
+
+Prisma
+------
+ORM used with GraphQL for database access.
+Type-safe database queries
+Easy pagination & relations
+Works well with GraphQL schemas
