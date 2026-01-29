@@ -1,0 +1,238 @@
+1) MongoDB Aggregation to Find Duplicates (by email)
+
+
+[
+  {
+    "_id": 1,
+    "email": "a@test.com",
+    "name": "Ganesh"
+  },
+  {
+    "_id": 2,
+    "email": "b@test.com",
+    "name": "Ravi"
+  },
+  {
+    "_id": 3,
+    "email": "a@test.com",
+    "name": "Ganesh"
+  },
+  {
+    "_id": 4,
+    "email": "c@test.com",
+    "name": "Suresh"
+  },
+  {
+    "_id": 5,
+    "email": "b@test.com",
+    "name": "Ravi"
+  }
+]
+
+db.collection.aggregate([
+  {
+    "$group": {
+      "_id": "$email",
+      "coun": {
+        "$sum": 1
+      },
+      "records": {
+        "$push": "$$ROOT"
+      }
+    }
+  }
+])
+
+
+[
+  {
+    "_id": "a@test.com",
+    "coun": 2,
+    "records": [
+      {
+        "_id": 1,
+        "email": "a@test.com",
+        "name": "Ganesh"
+      },
+      {
+        "_id": 3,
+        "email": "a@test.com",
+        "name": "Ganesh"
+      }
+    ]
+  },
+  {
+    "_id": "c@test.com",
+    "coun": 1,
+    "records": [
+      {
+        "_id": 4,
+        "email": "c@test.com",
+        "name": "Suresh"
+      }
+    ]
+  },
+  {
+    "_id": "b@test.com",
+    "coun": 2,
+    "records": [
+      {
+        "_id": 2,
+        "email": "b@test.com",
+        "name": "Ravi"
+      },
+      {
+        "_id": 5,
+        "email": "b@test.com",
+        "name": "Ravi"
+      }
+    ]
+  }
+]
+
+
+[
+  {
+    "_id": 1,
+    "userId": "U1",
+    "product": "Phone",
+    "price": 20000
+  },
+  {
+    "_id": 2,
+    "userId": "U1",
+    "product": "Laptop",
+    "price": 60000
+  },
+  {
+    "_id": 3,
+    "userId": "U1",
+    "product": "Mouse",
+    "price": 800
+  },
+  {
+    "_id": 4,
+    "userId": "U1",
+    "product": "Keyboard",
+    "price": 1500
+  },
+  {
+    "_id": 5,
+    "userId": "U1",
+    "product": "Monitor",
+    "price": 12000
+  },
+  {
+    "_id": 6,
+    "userId": "U1",
+    "product": "Charger",
+    "price": 1000
+  },
+  {
+    "_id": 7,
+    "userId": "U2",
+    "product": "Phone",
+    "price": 22000
+  },
+  {
+    "_id": 8,
+    "userId": "U2",
+    "product": "Laptop",
+    "price": 65000
+  },
+  {
+    "_id": 9,
+    "userId": "U3",
+    "product": "Tablet",
+    "price": 30000
+  },
+  {
+    "_id": 10,
+    "userId": "U3",
+    "product": "Headset",
+    "price": 2500
+  },
+  {
+    "_id": 11,
+    "userId": "U3",
+    "product": "Mouse",
+    "price": 900
+  },
+  {
+    "_id": 12,
+    "userId": "U3",
+    "product": "Keyboard",
+    "price": 1800
+  },
+  {
+    "_id": 13,
+    "userId": "U3",
+    "product": "Monitor",
+    "price": 14000
+  },
+  {
+    "_id": 14,
+    "userId": "U3",
+    "product": "Camera",
+    "price": 45000
+  },
+  {
+    "_id": 15,
+    "userId": "U3",
+    "product": "Speaker",
+    "price": 3500
+  }
+]
+
+
+db.collection.aggregate([
+  {
+    "$group": {
+      "_id": "$userId",
+      "totalOrders": {
+        "$sum": 1
+      },
+      "ordersAmount": {
+        $sum: "$price"
+      }
+    }
+  },
+  {
+    $match: {
+      totalOrders: {
+        $gt: 5
+      }
+    }
+  },
+  {
+    $sort: {
+      totalOrders: -1
+    }
+  }
+])
+
+[
+  {
+    "_id": "U3",
+    "ordersAmount": 97700,
+    "totalOrders": 7
+  },
+  {
+  
+  
+    "_id": "U1",
+    "ordersAmount": 95300,
+    "totalOrders": 6
+  }
+]
+
+const session = client.startSession();
+session.startTransaction();
+
+try {
+  await users.insertOne({ name: "A" }, { session });
+  await orders.insertOne({ item: "Book" }, { session });
+  await session.commitTransaction();
+} catch {
+  await session.abortTransaction();
+}
