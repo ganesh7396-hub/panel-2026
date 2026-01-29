@@ -1,0 +1,187 @@
+Question 1) What is difference between Javscript && Typescript ?
+JavaScript:-
+        Dynamically typed (types checked at runtime)
+        Runs directly in browser / Node.js
+        Many errors appear only during execution
+        Supports OOP but less strict
+        Flexible but can become messy in big apps
+TypeScript:-
+        Statically typed (types checked at compile time) TypeScript helps catch errors early before running the code.
+        Must be compiled (transpiled) into JavaScript TS is converted to JS using tsc
+        Errors are caught during development/compile time Better for large projects and teamwork.
+        Supports interfaces, enums, generics, access modifiers (public/private)
+        More maintainable because of types + better IDE support (auto-suggestion, refactor)
+
+Question 2) What is TypeScript ?
+TypeScript is a statically typed superset of JavaScript that provides type safety,
+better tooling, and early error detection during development.
+
+Example :-
+
+function add(a: number, b: number): number {
+  return a + b;
+}
+
+Question 3) How to complie typescript fie ?
+
+npm install -g typescript
+Project-level :
+npm install --save-dev typescript
+
+Create TypeScript file
+Example: index.ts
+Compile .ts to .js
+tsc index.ts
+
+Question 4)why do we use it?
+  Catch runtime errors at compile time
+  Better IntelliSense
+  Safer refactoring in large codebases
+
+Question 5) Difference between any, unknown, and never ?
+
+let a: any;
+let b: unknown;
+let c: never;
+
+| Type      | Description                        |
+| --------- | ---------------------------------- |
+| `any`     | No type checking                   |
+| `unknown` | Safer than `any`, needs validation |
+| `never`   | Function never returns             |
+
+
+function throwError(): never {
+  throw new Error("Error");
+}
+
+Question 6) Interface vs Type?
+Interface is extendable and ideal for object shapes
+Type is more flexible (unions, intersections)
+
+interface User {
+  name: string;
+}
+
+type Admin = User & {
+  role: string;
+};
+
+Best Practice:
+Use interface for public APIs
+Use type for complex unions
+
+Question 7) What are Generics ?
+Generics allow writing reusable and type-safe components.
+interface ApiResponse<T> {
+  data: T;
+  status: number;
+}
+
+const userResponse: ApiResponse<{ id: number; name: string }> = {
+  data: { id: 1, name: "Ganesh" },
+  status: 200
+};
+
+Question 9) What is Union type?
+Union type :-
+Union type means a value can be one of multiple types, but not all at the same time.
+type Success = { data: string };
+type Error = { error: string };
+type Response = Success | Error;
+function handleResponse(res: Response) {
+  if ("data" in res) {
+    console.log(res.data); // Success case
+  } else {
+    console.log(res.error); // Error case
+  }
+}
+
+Question 10)What is Intersection type?
+Intersection type:-
+Intersection type means combining multiple types into one, so the value must satisfy all types.
+type User = {
+  id: number;
+  name: string;
+};
+type Admin = User & { permissions: string[] };
+Union types represent multiple possible shapes (OR), while intersection types combine multiple types into one (AND).
+Question 11) What is Type Guard ?
+A Type Guard is a technique in TypeScript used to check the type of a variable at runtime and help TypeScript narrow down the exact type so you can safely access its properties or methods.
+Question 12)Why Type Guards are Needed ?
+Why Type Guards are Needed
+When a variable has multiple possible types (union type), TypeScript doesn’t know which one it is.
+Question 13)What is Enum?
+An enum (enumeration) is a TypeScript feature used to define a set of named constant values, making code more readable, maintainable, and type-safe.
+Question 14)what is Generics?
+Generics:-
+Generics allow us to write reusable, type-safe code by defining types as parameters, instead of hard-coding a specific type.
+interface ApiResponse<T> {
+  data: T;
+  status: number;
+}
+const userResponse: ApiResponse<{ id: number; name: string }> = {
+  data: { id: 1, name: "Ganesh" },
+  status: 200
+};
+
+
+Question 15)Why do we need Generics?
+Without generics:
+Code duplication
+Loss of type safety
+Use of any (dangerous)
+
+Generics solve this by:
+Making functions/classes reusable
+Keeping strong typing
+Preventing runtime bugs at compile time
+
+Question 16) What is Type Guards?
+“Type Guards are runtime checks that help TypeScript understand the exact type of a variable, so we can safely access its properties.”
+
+function printId(id: number | string) {
+  if (typeof id === "string") {
+    console.log(id.toUpperCase());
+  } else {
+    console.log(id.toFixed(2));
+  }
+}
+Question 17) Difference between readonly and const?
+
+readonly && const
+----------------
+“const prevents reassignment of a variable, while readonly prevents modification of object properties
+const arr = [1, 2]; // reference can't change
+arr.push(3);       // allowed
+
+interface User {
+  readonly id: number;
+}
+
+
+
+
+Question 18)What is Discriminated Union?
+A:“A discriminated union uses a common literal property to safely differentiate between types
+
+Question 19)What is Partial, Pick, Omit?
+Partial: “Makes all properties optional.”
+Pick: “Selects specific properties from a type.”
+Omit: “Removes specific properties from a type.”
+
+“Utility types help transform existing types without rewriting them.”
+
+type PartialUser = Partial<User>;
+type UserName = Pick<User, "name">;
+type UserWithoutPassword = Omit<User, "password">;
+
+Question 20) What is Structural Typing?
+TypeScript uses structural typing, meaning compatibility is based on shape, not name.”
+type A = { name: string };
+type B = { name: string };
+
+let a: A;
+let b: B;
+
+a = b; // allowed
