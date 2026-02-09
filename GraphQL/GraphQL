@@ -230,6 +230,8 @@ query {
     }
   }
 }
+
+
 Question 11) What are the  Common GraphQL Tools?
 
 Apollo Server
@@ -240,6 +242,77 @@ Built-in error handling
 Easy integration with NestJS / Express
 👉 Most commonly used GraphQL server
 
+Question 12)What are the core components of GraphQL ?
+
+Schema
+Type
+Query
+Mutation
+Resolver
+Subscription
+
+
+Question 13)What is the N+1 Problem?
+N+1 problem = too many database calls
+1 query to get a list
+N more queries inside a loop to get related data
+Result → slow API, bad performance ❌
+Solution: Use DataLoader (✅ correct way)
+👉 Fetch related data in one query, not inside a loop.
+npm install dataloader
+
+
+
+Create DataLoader
+const DataLoader = require('dataloader');
+
+const postLoader = new DataLoader(async (userIds) => {
+  const posts = await db.posts.find({
+    userId: { $in: userIds }
+  });
+
+  return userIds.map(id =>
+    posts.filter(post => post.userId === id)
+  );
+});
+
+
+
+Use DataLoader in resolver (✅ fixed)
+const resolvers = {
+  Query: {
+    users: () => db.users.find()
+  },
+
+  User: {
+    posts: (user, _, { loaders }) => {
+      return loaders.postLoader.load(user.id);
+    }
+  }
+};
+
+N+1 problem in GraphQL happens when a resolver makes a database query for each parent record, 
+causing 1 query for the list and N queries for related data. We solve it using batching tools like DataLoader.
+
+
+Question 13)What are Fragments?
+Reusable query parts.
+fragment UserFields on User {
+  id
+  name
+}
+
+
+Question 14)What is Context in GraphQL?
+Context carries:
+Auth user
+Database instance
+Request info
+Example:
+
+context: ({ req }) => ({
+  user: req.user
+})
 
 Prisma
 ------
