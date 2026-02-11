@@ -1,0 +1,1101 @@
+====================================================Easy=======================================================================
+Question 1) What is React? Describe the benefits of React?
+
+React is a JavaScript library created by Facebook for building user interfaces, especially
+single-page applications (SPAs).
+
+It helps developers build reusable UI components that can manage their own state,
+which makes it easier to build complex applications.
+
+Key features include:
+
+Component-based architecture: Developers can break the UI into small, reusable
+components.
+
+Virtual DOM: React updates the UI eciently by calculating dierences between
+the new and old DOM trees.
+
+Declarative UI: You describe how the UI should look for any given state, and React
+manages the rendering.
+
+One-way data binding: Data ows from parent to child components, making state
+management predictable.
+
+JSX syntax: Allows mixing HTML and JavaScript, making component structure
+more readable.
+
+
+Question 2) What is the dierence between React Node, React Element, and a React Component?
+
+A React Node is anything that can be rendered, such as a React element, string,
+number, array, or null .
+
+A React Element is an immutable object that describes what should appear in the
+UI. It’s created using JSX or React.createElement() .
+
+A React Component is a function or class that returns a React element and
+encapsulates logic and UI behavior
+
+	const element = <h1>Hello, world!</h1>;
+	
+	// React Component
+	function Greeting() {
+	return <h1>Hello!</h1>;
+	
+	}
+	// Using the component
+	const node = <Greeting />;
+	
+
+Question 3) What is JSX and how does it work?
+
+JSX (JavaScript XML) is a syntax extension that allows writing HTML-like code inside
+JavaScript. It makes dening UI structures more intuitive.
+JSX is not understood by browsers directly, so tools like Babel transpile it into
+React.createElement() calls.
+Example:
+const element = <div>Hello, world!</div>;
+Is transpiled to:
+const element = React.createElement('div', null, 'Hello, world!');
+
+
+Question 4) What is the dierence between state and props in React?
+
+State: Internal data managed by the component, can change over time.
+Props: External data passed from parent components, read-only within the
+component
+
+
+function Counter() {
+const [count, setCount] = React.useState(0); // state
+return (
+<div>
+<p>Count: {count}</p>
+<button onClick={() => setCount(count + 1)}>Increment</button>
+</div>
+);
+}
+function App() {
+return <Counter initialCount={0} />;
+// props can be passed here if needed
+}
+
+Question 5) What is the purpose of the key prop in React?
+
+The key prop helps React uniquely identify elements in a list. It optimizes rendering by
+tracking which items changed, were added, or removed.
+
+const items = [
+{ id: 1, value: 'Apple' },
+{ id: 2, value: 'Banana' }
+];
+function ItemList() {
+return (
+<ul>
+{items.map(item => (
+<li key={item.id}>{item.value}</li>
+))}
+</ul>
+);
+}
+
+
+Question 6) What does re-rendering mean in React?
+
+Re-rendering refers to the process where React updates a component’s output based on
+changes in its state or props. React recalculates the virtual DOM and updates the actual
+DOM to reect those changes.
+
+Whenever a component’s state or props change, React schedules a rerender. It creates a
+new virtual DOM tree, compares it to the previous one using the reconciliation process,
+and applies only the dierences to the real DOM.
+
+
+import React, { useState } from 'react';
+function Counter() {
+const [count, setCount] = useState(0);
+console.log("Component rendered");
+return (
+<div>
+<h1>Count: {count}</h1>
+<button onClick={() => setCount(count + 1)}>Increment</button>
+</div>
+
+
+
+Question 7). What are React Fragments used for?
+
+React Fragments allow you to group multiple elements without adding extra nodes to
+the DOM. It’s useful when you want to return multiple elements from a component
+without introducing unnecessary wrappers.
+
+import React from 'react';
+function List() {
+return (
+<>
+<li>Item 1</li>
+<li>Item 2</li>
+<li>Item 3</li>
+</>
+);
+
+
+====================================================Beginner====================================================================
+
+Question 8) What are the benets of using hooks in React?
+
+Hooks allow functional components to use state and other React features without
+writing classes.
+
+Explanation:
+Simpler code: Eliminates the need for class components and lifecycle methods.
+Reusable logic: Custom hooks allow encapsulating stateful logic.
+Better readability: Clear separation of state and effects
+Functional approach: Encourages a functional programming style, making code
+easier to test and maintain.
+
+
+Question 9) How do you reset a component’s state in React?
+Resetting a component’s state means restoring it to its initial values, often used after
+form submissions or when navigating between views.
+
+
+State in React is mutable through setState or the useState hook. To reset it, you
+simply assign the initial state again. This ensures the component’s UI reects the reset
+state
+
+
+
+
+import React, { useState } from 'react';
+const initialState = { name: '', email: '' };
+function Form() {
+const [formData, setFormData] = useState(initialState);
+const handleReset = () => {
+setFormData(initialState);
+};
+return (
+<div>
+<input
+value={formData.name}
+onChange={(e) => setFormData({ ...formData,
+name: e.target.value })}
+placeholder="Name"
+/>
+<input
+value={formData.email}
+onChange={(e) => setFormData({ ...formData,
+email: e.target.value })}
+placeholder="Email"
+/>
+<button onClick={handleReset}>Reset</button>
+</div>
+);
+}
+export default Form;
+
+
+Question 10) How do you debug React applications?
+Debugging in React involves inspecting component trees, checking state and props, and
+identifying errors using browser tools and libraries.
+
+1. React Developer Tools: Inspect the component hierarchy, state, and props.
+2. Console logs: Use console.log() to trace state updates or errors.
+3. Breakpoints: Set breakpoints in browser DevTools to step through code.
+4. Error boundaries: Catch rendering errors and inspect stack traces.
+5. Network inspection: Check API requests and responses.
+
+
+Question 11) What is React strict mode and what are its benets ?
+
+React Strict Mode is a tool that helps developers find potential issues by adding
+additional checks and warnings during development.
+
+Detects components with unsafe lifecycle methods.
+
+Identies side eects and unexpected behaviors.
+
+Highlights deprecated APIs.
+Helps prepare code for future versions of React.
+import React from 'react';
+function App() {
+return (
+<React.StrictMode>
+<MyComponent />
+</React.StrictMode>
+);
+}
+
+
+
+
+Question 12) Explain one-way data ﬂow of React and its benefits?
+One-way data ow means that data ows from parent components down to child
+components, making state management more predictable
+
+
+
+In React, data ows in a single direction—from parent components to child components
+via props. This ensures that data dependencies are clear and that child components
+cannot directly modify data owned by parent components
+
+Parent denes state and passes it to children.
+Children render UI based on props.
+Children communicate changes via callbacks passed from the parent.
+
+Question 13) What is the role of keys in React lists and why are they important?
+
+Keys help React identify which items have changed, been added, or removed when
+rendering lists.
+Explanation:
+When rendering lists in React, each element needs a unique key so that React can
+eciently update only the parts that have changed. Without keys, React will re-render
+the entire list unnecessarily, causing performance issues and potentially leading to UI
+bugs.
+How it works:
+Keys are used by React’s reconciliation algorithm to match elements between
+renders.
+If keys change or are missing, React may reuse incorrect elements, leading to
+unexpected behavior.
+
+
+
+Question 14) What are fragments in React and why are they useful?
+
+Fragments let you group multiple elements without adding extra nodes to the DOM.
+Explanation:
+In React, a component must return a single element. Sometimes you need to group
+elements without introducing unnecessary markup, like extra <div> s that clutter the
+HTML structure. React fragments solve this by allowing you to wrap elements without
+adding new DOM nodes.
+
+Question 15) What are React hooks and why were they introduced?
+Hooks are functions that let you use React features like state and lifecycle methods in
+functional components.
+Before hooks, state and lifecycle logic could only be used in class components. Hooks
+were introduced to enable functional components to manage state, side eects, and
+other behaviors without the complexity of classes.
+This simplied code, improved reuse, and aligned better with JavaScript functions.
+useState : Manage state in functional components.
+useEffect : Handle side eects like data fetching or subscriptions.
+useContext : Access global data.
+useRef : Persist mutable values or DOM references.
+useReducer : Manage complex state logic
+
+
+====================================================Intermediate========================================================
+Question 16)What is the consequence of using array indices as the value for key in React?
+
+Using array indices as keys in React lists can lead to bugs and performance issues
+because React uses keys to identify which items have changed, been added, or removed.
+Keys should be stable, predictable, and unique.
+If array indices are used as keys, reordering, adding, or removing items can confuse
+React during reconciliation.
+This can cause components to unnecessarily re-render or preserve incorrect state.
+Example:
+const items = ['Apple', 'Banana', 'Cherry'];
+items.map((item, index) => <div key={index}>{item}</div>);
+
+Question 17) What is the dierence between controlled and uncontrolled React Components?
+
+Controlled components are form inputs whose values are managed by React state.
+Uncontrolled components maintain their own internal state and are accessed via refs.
+Explanation:
+Controlled: The state is the single source of truth. Input value is tied to state and
+updated via onChange .
+Uncontrolled: Input value is stored in the DOM. Accessed using ref when
+needed.
+
+	function ControlledInput() {
+		const [value, setValue] = React.useState('');
+		return <input
+		value={value}
+		onChange={(e) => setValue(e.target.value)}
+		/>;
+	}
+
+	function UncontrolledInput() {
+		const inputRef = React.useRef();
+		const handleClick = () => {
+		alert(inputRef.current.value);
+		};
+		return (
+		<>
+		<input ref={inputRef} />
+		<button onClick={handleClick}>Show Value</button>
+		</>
+		);
+	}
+
+
+Question 18)What are some pitfalls about using context in React?
+React Context provides a way to share global state, but improper usage can lead to
+performance and maintainability issues.
+
+
+Question 19)What are the rules of React hooks?
+
+Hooks have rules to ensure predictable behavior and maintain component integrity.
+Explanation:
+1. Call hooks at the top level: Don’t call inside loops, conditions, or nested functions.
+2. Call hooks only in React functions: Functional components or custom hooks.
+3. Custom hooks must start with “use”: Helps React identify hook calls.
+
+
+
+Question 20)What is the dierence between useEffect and useLayoutEffect in
+React?
+
+useEffect :useEffect is a React Hook that runs side effects 
+after the component has rendered and the browser has painted the screen.
+
+useLayoutEffect: is a React Hook that runs synchronously after the DOM has been updated but before the browser paints the screen.
+
+useEffect runs asynchronously after the component renders and the browser paints the UI, making it suitable for data fetching and side effects that do not affect layout. useLayoutEffect, on the other hand, runs synchronously after the DOM updates but before the browser paints, making it ideal for DOM measurements and layout adjustments where visual consistency is important.
+
+
+
+useEffect
+Execution timing:- Runs after the browser has painted the UI
+Suitable for:-Data fetching,subscriptions, event listeners
+Blocking behavior :-Doesn’t block rendering
+
+
+useLayoutEffect
+
+Execution timing:-Runs after DOM updates but before paint
+Suitable for:-Measuring or synchronizing DOM elements before user sees it
+Blocking behavior :-Blocks rendering until executed
+
+When to use each:
+useEffect :
+Fetching data after initial render
+Adding event listeners or subscriptions
+Performing actions that don’t aect layout calculations
+useLayoutEffect :
+Measuring DOM elements before paint
+Synchronously updating DOM styles
+Adjusting scroll position or animations before user interactionss
+
+Question 21)What does the dependency array of useEffect affect?
+
+The dependency array determines when the eect should be re-executed after renders.
+It’s crucial to manage this correctly to avoid unnecessary reruns or stale data.
+
+Explanation:
+If the dependency array is empty ( [] ), the eect runs once after the initial render.
+If the array includes variables, the eect runs whenever one of them changes.
+If omitted, the eect runs after every render, which can lead to performance
+issues
+
+code :-
+
+
+import React, { useState, useEffect } from 'react';
+function Timer() {
+const [count, setCount] = useState(0);
+useEffect(() => {
+© 2025 NamasteDev | Empowering developers to build, learn, and grow 21/109
+console.log('Effect runs');
+const interval = setInterval(() => {
+setCount(c => c + 1);
+}, 1000);
+return () => clearInterval(interval);
+}, []); // Empty array: effect runs once on mount
+return <div>Count: {count}</div>;
+}
+If we used [count] , it would re-run the eect on every count update, unnecessarily
+creating new intervals.
+
+[]	Only once (on mount)
+[count]	Whenever count changes
+No dependency array	On every render
+
+
+Question 22)What is the useRef hook in React and when should it be used?
+
+useRef creates a persistent reference that doesn’t cause rerenders when updated. It’s
+commonly used to access DOM elements or keep mutable state across renders.
+
+
+useRef doesn't notify you when its content changes. Mutating the (.current) property doesn’t cause a re-render.
+
+
+
+Returns a mutable object { current: ... } .
+Persists across renders, making it suitable for storing values without triggering
+updates.
+
+Useful for:
+Accessing DOM nodes
+Storing previous state
+Holding intervals or timers
+Managing focus
+
+import React, { useRef, useEffect } from 'react';
+function FocusInput() {
+const inputRef = useRef(null);
+useEffect(() => {
+inputRef.current.focus();
+}, []);
+return <
+
+Question 23) What is the useCallback hook in React and when should it be used?
+
+
+useCallback memoizes functions so that they are only recreated when dependencies
+change. It’s a performance optimization that prevents unnecessary rerenders, especially
+in child components.
+
+
+Functions in JavaScript are recreated every time a component rerenders. If a function is
+passed as a prop to a child, the child may rerender unnecessarily. useCallback ensures
+that the function reference stays stable unless its dependencies change.
+
+
+import React, { useState, useCallback } from 'react';
+function Parent() {
+const [count, setCount] = useState(0);
+const increment = useCallback(() => {
+setCount(c => c + 1);
+}, []);
+return <Child onIncrement={increment} />;
+}
+function Child({ onIncrement }) {
+console.log("Child rendered");
+return <button onClick={onIncrement}>Increment</button>;
+}
+
+Question 24) What is the useMemo hook in React and when should it be used?
+
+useMemo is a React hook that memoizes the result of a function so that it is only
+recalculated when its dependencies change. This helps avoid expensive computations
+on every render and improves performance.
+
+
+import React, { useState, useMemo } from 'react';
+function App() {
+const [count, setCount] = useState(0);
+const [text, setText] = useState('');
+const factorial = useMemo(() => {
+console.log('Calculating factorial...');
+return computeFactorial(count);
+}, [count]);
+return (
+<div>
+<h1>Factorial of {count} is {factorial}</h1>
+<button onClick={() => setCount(count + 1)}>
+Increment
+</button>
+<input
+value={text}
+onChange={e => setText(e.target.value)}
+placeholder="Type here"
+/>
+</div>
+);
+}
+function computeFactorial(n) {
+if (n <= 0) return 1;
+return n * computeFactorial(n - 1);
+}
+In this example, changing
+
+
+
+Question 25)  What is the useReducer hook in React and when should it be used?
+
+useReducer is a hook that manages complex state logic by using a reducer function. It’s
+an alternative to useState , suitable when state has multiple sub-values or when the
+next state depends on the previous state.
+
+Explanation:
+A reducer is a function that takes the current state and an action, and returns a new
+state. useReducer provides a more structured way of updating state, especially when
+state transitions are complex or require multiple branches of logic.
+
+import React, { useReducer } from 'react';
+const initialState = { count: 0 };
+function reducer(state, action) {
+switch(action.type) {
+case 'increment':
+return { count: state.count + 1 };
+case 'decrement':
+return { count: state.count - 1 };
+default:
+© 2025 NamasteDev | Empowering developers to build, learn, and grow 27/109
+throw new Error('Unknown action');
+}
+}
+function Counter() {
+const [state, dispatch] = useReducer(reducer, initialState);
+return (
+<div>
+<h1>Count: {state.count}</h1>
+<button onClick={() => dispatch({ type: 'increment' })}>
++
+</button>
+<button onClick={() => dispatch({ type: 'decrement' })}>
+-
+</button>
+</div>
+);
+}
+export default Counter;
+When to use:
+When state is an object with mult
+
+
+Question 26)What is the useId hook in React and when should it be used?
+
+useId generates unique IDs that are stable across server and client renders. It is
+particularly useful for linking form elements, labels, and other accessibility-related
+attributes
+
+Generating unique IDs is important to prevent clashes when rendering forms or
+components multiple times. useId ensures IDs are unique even when server-side
+rendering (SSR) is used, which helps with hydration and accessibility.
+
+
+import React, { useId } from 'react';
+function LoginForm() {
+const id = useId();
+return (
+<form>
+<label htmlFor={id}>Username:</label>
+<input id={id} type="text" />
+</form>
+);
+}
+
+
+Question 27)What is forwardRef() in React used for?
+
+
+forwardRef() is a React API that allows a component to forward its ref to one of its
+child components. This is useful when the parent component needs direct access to a
+DOM element or a child component’s instance
+
+
+Normally, refs are used to directly access DOM elements or components. However,
+when you wrap a component, its ref doesn’t automatically get passed down.
+forwardRef() lets you explicitly forward the ref to a specic child, enabling scenarios
+like focusing inputs or managing animations
+
+import React, { forwardRef, useRef } from 'react';
+const CustomInput = forwardRef((props, ref) => {
+return <input ref={ref} {...props} />;
+});
+function App() {
+const inputRef = useRef();
+const focusInput = () => {
+inputRef.current.focus();
+};
+return (
+<div>
+<CustomInput ref={inputRef} placeholder="Type here" />
+<button onClick={focusInput}>Focus Input</button>
+</div>
+);
+}
+export default App;
+
+
+Question 28) How do you reset a component’s state in React?
+
+Resetting a component’s state means restoring it to its initial values, often used after
+form submissions or when navigating between views.
+
+State in React is mutable through setState or the useState hook. To reset it, you
+simply assign the initial state again. This ensures the component’s UI reects the reset
+state.
+
+Example:
+import React, { useState } from 'react';
+const initialState = { name: '', email: '' };
+function Form() {
+const [formData, setFormData] = useState(initialState);
+const handleReset = () => {
+setFormData(initialState);
+};
+return (
+<div>
+<input
+value={formData.name}
+onChange={(e) => setFormData({ ...formData,
+name: e.target.value })}
+placeholder="Name"
+/>
+<input
+value={formData.email}
+onChange={(e) => setFormData({ ...formData,
+email: e.target.value })}
+placeholder="Email"
+/>
+<button onClick={handleReset}>Reset</button>
+</div>
+);
+}
+export default Form
+
+Question 29) What are error boundaries in React for?
+Error boundaries are special React components that catch errors in their child
+components during rendering, lifecycle methods, or constructors, preventing the entire
+app from crashing
+
+Explanation:
+React’s component tree doesn’t handle errors by default. Error boundaries act as a
+safeguard by catching JavaScript errors and showing fallback UI instead of breaking the
+entire application.
+
+Implemented using componentDidCatch and getDerivedStateFromError .
+Catch errors in rendering, lifecycle methods, and constructors.
+Don’t catch errors in event handlers, asynchronous code, or server-side rendering.
+
+import React from 'react';
+class ErrorBoundary extends React.Component {
+constructor(props) {
+super(props);
+this.state = { hasError: false };
+}
+static getDerivedStateFromError(error) {
+return { hasError: true };
+}
+componentDidCatch(error, info) {
+console.error("Error caught:", error, info);
+}
+render() {
+if (this.state.hasError) {
+return <h2>Something went wrong.</h2>;
+}
+© 2025 NamasteDev | Empowering developers to build, learn, and grow 38/109
+return this.props.children;
+}
+}
+function BuggyComponent() {
+throw new Error("Oops!");
+return <div>Normal content</div>;
+}
+function App() {
+return (
+<ErrorBoundary>
+<BuggyComponent />
+</ErrorBoundary>
+);
+}
+export default App;
+
+
+Question 30) How do you test React applications?
+
+Testing ensures that React components behave as expected. You can use libraries like
+Jest and React Testing Library to write unit, integration, and end-to-end tests.
+Explanation:
+Testing helps catch bugs early and ensures UI correctness. Jest is a test runner and
+assertion library, while React Testing Library simulates user interactions and veries
+component behavior without relying on implementation details.
+
+Types of tests:
+1. Unit tests: Test individual components or functions.
+2. Integration tests: Verify how components interact together.
+3. End-to-end tests: Test full workows, often using tools like Cypress.
+
+import { render, screen, fireEvent } from '@testing-library/react';
+import Counter from './Counter';
+test('increments count on button click', () => {
+render(<Counter />);
+const button = screen.getByText('Increment');
+fireEvent.click(button);
+expect(screen.getByText('Count: 1')).toBeInTheDocument();
+});
+
+
+Question 31)Explain what React hydration is
+
+Hydration is the process where a server-rendered HTML page is “wired up” with
+JavaScript to make it interactive on the client side.
+
+
+When you use Server-Side Rendering (SSR), the server sends a fully rendered HTML
+page to the browser. This improves load time and SEO. However, the HTML alone isn’t
+interactive event listeners and state management need to be attached once the
+JavaScript code is loaded on the client. This process of attaching event handlers and
+initializing state without replacing the existing markup is called hydration.
+
+
+Question 32)What are React Portals used for?
+
+Portals allow you to render a component’s children into a DOM node that exists outside
+the parent component’s hierarchy.
+Explanation:
+Sometimes you need UI elements like modals, tooltips, or dropdowns to break out of
+their parent container’s styles, overow, or z-index constraints. Portals let you render
+content elsewhere in the DOM tree while keeping the component’s logic within its
+parent.
+
+Sometimes you need UI elements like modals, tooltips, or dropdowns to break out of
+their parent container’s styles, overow, or z-index constraints. Portals let you render
+content elsewhere in the DOM tree while keeping the component’s logic within its
+parent.
+
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+function Modal({ children }) {
+return ReactDOM.createPortal(
+<div className="modal">
+{children}
+</div>,
+document.getElementById('modal-root')
+// outside the main app container
+);
+}
+function App() {
+return (
+<div>
+© 2025 NamasteDev | Empowering developers to build, learn, and grow 43/109
+<h1>My App</h1>
+<Modal>
+<h2>I'm a modal!</h2>
+</Modal>
+</div>
+);
+}
+export default App;
+
+
+Question 33)How do you localize React applications?
+
+Localization is the process of adapting an application’s content for dierent languages
+and regions, making it accessible to a broader audience.
+
+Localization involves providing translations, date/time formats, number formats, and
+culturally appropriate content. In React, libraries like react-i18next and react-intl
+make it easier to manage translations and switch languages dynamically.
+
+teps to localize an app:
+1. Create translation les for dierent languages.
+2. Use an i18n library to load and switch translations.
+3. Replace static text with translatable keys.
+
+
+Question 34). What are higher order components in React?
+Higher-order components (HOCs) are functions that take a component as input and
+return a new component with added functionality or props.
+Explanation:
+HOCs are a design pattern for reusing logic across components without duplicating
+code. Instead of inheritance, you wrap a component to enhance its behavior.
+A typical HOC adds props, handles state, or injects logic into wrapped components
+
+
+
+Question 35). What is the Flux pattern and what are its benets?
+Flux is an architectural pattern for managing application state with a unidirectional data
+ow.
+Explanation:
+In traditional applications, data can ow in multiple directions, making it hard to track
+state changes. Flux enforces a single direction for data ow, making state management
+predictable and easier to debug.
+
+Core components:
+1. Dispatcher: Sends actions to stores.
+© 2025 NamasteDev | Empowering developers to build, learn, and grow 54/109
+2. Stores: Hold application state and logic.
+3. Actions: Dene events that change the state.
+4. Views (Components): React to changes in stores and update the UI.
+
+Data ow sequence:
+1. User triggers an event.
+2. An action is created and dispatched.
+3. Stores update based on the action.
+4. Views re-render with updated state.
+
+
+
+
+Question 36) How do you handle asynchronous data loading in React applications?
+
+Handling asynchronous data loading in React involves fetching data from APIs or other
+sources and updating the component state accordingly while managing loading and
+error states.
+
+import React, { useState, useEffect } from 'react';
+function DataFetchingComponent() {
+const [data, setData] = useState(null);
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState(null);
+useEffect(() => {
+async function fetchData() {
+© 2025 NamasteDev | Empowering developers to build, learn, and grow 58/109
+try {
+const response = await fetch('https://api.example.com/data');
+if (!response.ok) {
+throw new Error('Network response was not ok');
+}
+const result = await response.json();
+setData(result);
+} catch (err) {
+setError(err.message);
+} finally {
+setLoading(false);
+}
+}
+fetchData();
+}, []); // Empty dependency array to run once on mount
+if (loading) return <div>Loading...</div>;
+if (error) return <div>Error: {error}</div>;
+return <div>Data: {JSON.stringify(data)}</div>;
+}
+
+
+Question 37) Explain server-side rendering of React applications and its benets
+Server-side rendering (SSR) refers to rendering React components on the server and
+sending fully rendered HTML to the client.
+
+Benets:
+1. Improved SEO: Search engines can index content from the initial HTML.
+2. Faster load times: Users see content faster since it’s rendered on the server.
+3. Better performance on slow devices: Less JavaScript processing is required on the
+client.
+
+
+Question 38) Explain the presentational vs container component pattern in React
+This pattern helps separate concerns by distinguishing between components
+responsible for UI and those responsible for logic and state.
+Explanation:
+Presentational components: Focus on how the UI looks. They receive data and
+callbacks via props and have little to no state.
+Container components: Focus on how the application works. They manage state,
+data fetching, and logic, and pass props to presentational components.
+
+// Presentational component
+function UserList({ users }) {
+return (
+<ul>
+{users.map((user) => (
+<li key={user.id}>{user.name}</li>
+))}
+</ul>
+);
+}
+// Container component
+function UserContainer() {
+const [users, setUsers] = useState([]);
+useEffect(() => {
+fetch('/api/users')
+.then((res) => res.json())
+.then((data) => setUsers(data));
+}, []);
+return <UserList users={users} />;
+}
+
+
+Question 39)What are controlled and uncontrolled components in React?
+
+Controlled components have their state managed by React, while uncontrolled
+components manage their own state internally.
+Explanation:
+Controlled components: The value of the input is controlled via React’s state. The
+component’s data is always in sync with the state.
+Uncontrolled components: The input’s value is handled by the DOM itself, and
+React accesses it using refs when needed.
+
+function ControlledInput() {
+const [value, setValue] = React.useState('');
+return (
+<input
+type="text"
+value={value}
+onChange={(e) => setValue(e.target.value)}
+/>
+);
+}
+
+
+function UncontrolledInput() {
+const inputRef = React.useRef();
+const handleSubmit = () => {
+alert('Input value: ' + inputRef.current.value);
+};
+return (
+<div>
+© 2025 NamasteDev | Empowering developers to build, learn, and grow 70/109
+<input type="text" ref={inputRef} />
+<button onClick={handleSubmit}>Submit</button>
+</div>
+);
+}
+
+
+
+
+Question 40) Explain the use of the Context API in React?
+
+The Context API provides a way to share state across the component tree without
+passing props through every level
+
+React’s Context API allows data to be passed globally through the component hierarchy,
+making it useful for themes, user data, or settings that multiple components need to
+access.
+It helps avoid “prop drilling,” where props are passed through many intermediate
+components unnecessarily.
+Steps to use Context:
+1. Create a context.
+2. Wrap components with a provider.
+3. Use the context in child components via useContext .
+
+import React, { createContext, useContext, useState } from 'react';
+const ThemeContext = createContext();
+function App() {
+const [theme, setTheme] = useState('light');
+return (
+<ThemeContext.Provider value={{ theme, setTheme }}>
+<Toolbar />
+</ThemeContext.Provider>
+);
+}
+function Toolbar() {
+return <ThemedButton />;
+}
+function ThemedButton() {
+const { theme } = useContext(ThemeContext);
+return <button>{`Current theme: ${theme}`}</button>;
+}
+Sharing data like themes, authentication, or settings.
+
+
+Question 41)  How does the virtual DOM in React work? What are its benets and
+downsides?
+
+The virtual DOM is a lightweight copy of the actual DOM that helps React eciently
+update the UI by comparing changes before applying them to the real DOM.
+
+When the state or props of a component change, React doesn’t update the actual DOM
+immediately. Instead, it creates a virtual representation of the DOM, compares it with
+the previous version, and identies what’s dierent. This process, known as “ding” or
+“reconciliation,” allows React to update only the necessary parts, improving
+performance.
+
+
+Steps in virtual DOM:
+1. A state or prop change triggers a re-render.
+2. A new virtual DOM tree is created based on the updated component.
+3. The new virtual DOM is compared with the previous version.
+4. Dierences are calculated.
+5. Only the changed parts are updated in the actual DOM.
+Benets:
+© 2025 NamasteDev | Empowering developers to build, learn, and grow 75/109
+Improved performance: Minimizes direct DOM manipulations which are
+expensive.
+Declarative UI: Developers only describe how the UI should look.
+Predictability: Updates are applied systematically, reducing bugs.
+Downsides:
+Overhead: Creating and comparing virtual DOM trees adds computational work.
+Not always faster: For very simple or static applications, virtual DOM may not
+oer signicant benets.
+Requires understanding: Misusing state updates or improper patterns can negate
+performance advantages
+
+function Counter() {
+const [count, setCount] = React.useState(0);
+return (
+<div>
+<p>{`Count: ${count}`}</p>
+<button onClick={() => setCount(count + 1)}>Increment</button>
+</div>
+);
+}
+Question 42). What is reconciliation in React?
+
+
+Reconciliation is the process by which React compares two versions of the virtual DOM
+and updates the actual DOM eciently.
+Explanation:
+When state or props change, React generates a new virtual DOM. It then compares the
+new tree with the previous one and determines the minimal set of changes required to
+update the actual DOM. This comparison process is called reconciliation.
+
+
+Question 43).What are custom hooks and why should you use them?
+
+Custom hooks are reusable functions built on top of React’s built-in hooks ( useState ,
+useEffect , etc.). They allow you to encapsulate logic that can be shared across multiple
+components.
+
+import { useState, useEffect } from 'react';
+function useWindowWidth() {
+const [width, setWidth] = useState(window.innerWidth);
+useEffect(() => {
+const handleResize = () => setWidth(window.innerWidth);
+window.addEventListener('resize', handleResize);
+return () => window.removeEventListener('resize', handleResize);
+}, []);
+return width;
+}
+function Component() {
+const width = useWindowWidth();
+return <div>Window width is {width}px</div>;
+}
+
+
+Question 44) How do you handle accessibility (a11y) in a React application?
+
+Accessibility ensures that your application can be used by people with disabilities. React
+encourages semantic HTML and attributes like aria-* to improve accessibility.
+
+Use semantic elements like <button> , <nav> , <form> .
+Add aria-label , aria-describedby , and aria-expanded where needed.
+Ensure proper keyboard navigation (using tabIndex , etc.).
+Manage focus for modals or dialogs.
+Use libraries like react-aria or react-axe to audit accessibility
+
+
+Question 45) What are React Portals and when would you use them? Can you give
+a complex example?
+React Portals allow rendering components outside of the parent DOM hierarchy while
+keeping React’s state and context intact. This is useful for modals, tooltips, dropdowns,
+etc., that need to break out of layout constraint
+
+import ReactDOM from 'react-dom';
+function Modal({ children, isOpen, onClose }) {
+if (!isOpen) return null;
+return ReactDOM.createPortal(
+<div className="modal-backdrop" onClick={onClose}>
+<div
+className="modal-content"
+onClick={(e) => e.stopPropagation()}
+>
+{children}
+© 2025 NamasteDev | Empowering developers to build, learn, and grow 105/109
+</div>
+</div>,
+document.getElementById('modal-root')
+);
+}
+
+Question 46) Explain the dierence between shallow rendering and full DOM
+rendering in React testing
+
+In testing, shallow rendering and full DOM rendering are two dierent approaches to
+isolate component behavior.
+Shallow rendering:
+Renders the component without rendering its child components.
+Used to test a component’s output in isolation.
+Provided by tools like enzyme .
+Full DOM rendering:
+Renders the entire component tree.
+© 2025 NamasteDev | Empowering developers to build, learn, and grow 106/109
+Suitable for integration tests where you need to interact with nested components
+or lifecycle methods.
+
+
+import { shallow, mount } from 'enzyme';
+import MyComponent from './MyComponent';
+test('shallow test', () => {
+const wrapper = shallow(<MyComponent />);
+expect(wrapper.find('button').exists()).toBe(true);
+});
+test('full render test', () => {
+const wrapper = mount(<MyComponent />);
+expect(wrapper.find('ChildComponent').length).toBe(1);
+});
