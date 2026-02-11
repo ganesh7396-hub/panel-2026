@@ -877,3 +877,25 @@ Question 38)What is Load Balancing (in Node.js)?
     One Node process = one CPU core
     High traffic can block requests
     Crashes should not bring the app down
+
+Question 39) What is difference between require vs import?
+
+require :-
+
+Used in CommonJS
+Older module system
+Default in older Node.js versions
+Synchronous loading
+const fs = require("fs");
+
+
+import :-
+
+Used in ES Modules (ESM)
+Modern JavaScript standard
+Asynchronous loading
+Supports tree-shaking
+
+import fs from "fs";
+
+
