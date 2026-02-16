@@ -177,6 +177,7 @@ GraphQL always returns HTTP 200
 Actual errors are sent inside the errors array
 Successful data (if any) is returned in the data field
 
+
 Throw errors in resolvers
 --------------------------------
 if (!user) {
@@ -296,14 +297,60 @@ causing 1 query for the list and N queries for related data. We solve it using b
 
 
 Question 13)What are Fragments?
-Reusable query parts.
-fragment UserFields on User {
-  id
-  name
+Fragments in GraphQL are reusable pieces of a query.
+
+They help you:
+
+Avoid repeating the same fields
+Keep queries clean
+Improve maintainability
+
+🔹 Why We Need Fragments?
+
+Imagine you need the same fields in multiple places.
+Without fragment ❌ (repetition):
+
+query {
+  user1: getUser(id: "1") {
+    id
+    name
+    email
+  }
+
+  user2: getUser(id: "2") {
+    id
+    name
+    email
+  }
 }
 
 
+Here, id, name, email are repeated.
+
+🔹 With Fragment ✅ (Reusable)
+fragment UserFields on User {
+  id
+  name
+  email
+}
+
+query {
+  user1: getUser(id: "1") {
+    ...UserFields
+  }
+
+  user2: getUser(id: "2") {
+    ...UserFields
+  }
+}
+
+
+👉 Now fields are defined once and reused.
+
+
 Question 14)What is Context in GraphQL?
+
+Context is a shared object available in every resolver during a request.
 Context carries:
 Auth user
 Database instance
