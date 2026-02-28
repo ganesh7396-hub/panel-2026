@@ -7,7 +7,7 @@ On the cloud side, I have hands-on experience with AWS services such as EC2, Lam
 Project 1
 
 Project Name: Ground Support Platform - Pull Test App 
-Environment: NestJS, Node.js, Express, PostgreSQL, GraphQL. 
+Environment: NestJS, Node.js, Express, PostgreSQL, GraphQL. React  Js
 I developed backend APIs for a mining safety system that records and tracks field test 
 data. I focused on secure data handling, quality code, and reliable communication between the mobile 
 app and backend services. 
