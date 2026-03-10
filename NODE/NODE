@@ -898,4 +898,13 @@ Supports tree-shaking
 
 import fs from "fs";
 
+Question 40) When do you choose MongoDB and when do you choose MySQL?
+
+We choose MongoDB when we need flexible schema, fast development, and horizontal scalability, 
+especially for unstructured or rapidly changing data like social media or analytics systems
+
+We choose MySQL when the application requires strong relational data, complex joins, and 
+strict ACID transactions such as banking systems, e-commerce orders, and financial applications
+
+
 
