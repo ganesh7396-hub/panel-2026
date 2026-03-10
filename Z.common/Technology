@@ -1,0 +1,13 @@
+Q1 What is Agile methodology?
+  
+Agile is a software development methodology where work is delivered in small iterations called sprints instead of one large release.
+Teams collaborate closely, get continuous feedback from stakeholders, and quickly adapt to changing requirements.
+It focuses on frequent delivery, customer value, and continuous improvement.
+Frameworks like Scrum and Kanban are commonly used to implement Agile.
+
+Q2 What is Git and GitHub? 
+  Git is a distributed version control system used to track code changes and manage collaboration between developers
+  GitHub is a cloud platform that hosts Git repositories and provides collaboration features like pull requests and code reviews.
+  Developers typically clone a repo, create branches, commit changes, push them to GitHub, and merge them through pull requests after review.
+  
+Q3
