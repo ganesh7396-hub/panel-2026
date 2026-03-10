@@ -768,19 +768,14 @@ Be careful with closures holding references to large objects
 >PM2 memory monitoring
 
  Question 30)How do you optimze code and performance of node application?
-
- 
-optimize code and improve performance in a Node.js application, you can follow these strategies:
-Asynchronous Programming: Leverage asynchronous operations using async/await, promises, and non-blocking I/O to improve concurrency and prevent blocking the event loop.
-
-Use Clustering: Utilize Node.js's cluster module to take advantage of multi-core systems by spawning worker processes to handle requests in parallel.
-
-Optimize Database Queries: Reduce the number of database queries and optimize them using indexing, caching, and limiting the data returned.
-Memory Management: Monitor and manage memory usage carefully by handling large objects, closing database connections, and removing unused event listeners to prevent memory leaks.
-Compression: Use middleware like compression to compress HTTP responses, reducing payload sizes and improving response times.
-Caching: Implement caching mechanisms like Redis to cache frequently accessed data and reduce database or API load.
-Profiling and Monitoring: Use tools like clinic.js or node --inspect to profile your code and identify bottlenecks in per
-formance.
+	optimize code and improve performance in a Node.js application, you can follow these strategies:
+	Asynchronous Programming: Leverage asynchronous operations using async/await, promises, and non-blocking I/O to improve concurrency and prevent blocking the event loop.
+	Use Clustering: Utilize Node.js's cluster module to take advantage of multi-core systems by spawning worker processes to handle requests in parallel.
+	Optimize Database Queries: Reduce the number of database queries and optimize them using indexing, caching, and limiting the data returned.
+	Memory Management: Monitor and manage memory usage carefully by handling large objects, closing database connections, and removing unused event listeners to prevent memory leaks.
+	Compression: Use middleware like compression to compress HTTP responses, reducing payload sizes and improving response times.
+	Caching: Implement caching mechanisms like Redis to cache frequently accessed data and reduce database or API load.
+	Profiling and Monitoring: Use tools like clinic.js or node --inspect to profile your code and identify bottlenecks in performance.
 By applying these techniques, you can significantly enhance the speed and scalability of your Node.js application.
 
 
@@ -843,11 +838,15 @@ Question 35) what is single Thread and Multi Threading ?
 
 Question 36)why node js single thread?
 
-    the event loop runs one process at a time. That means it can only execute one function at a time, and 
+	the event loop runs one process at a time. That means it can only execute one function at a time, and 
     since functions can have multiple instructions,
     the event loop will execute one instruction at a time.
 
-Question 36)How its works in node js?
+Node.js is single-threaded because it uses an event-driven, non-blocking I/O model. 
+The main thread runs the event loop and handles JavaScript execution, while heavy operations like file system or network tasks are delegated to libuv’s thread pool. 
+This design avoids thread synchronization issues and allows Node.js to efficiently handle many concurrent requests.
+
+Question 36)How its works Multi Threading in node js?
     Node.js supports multi-threading using Worker Threads and the Cluster module.
     The Cluster module creates multiple processes to handle requests in parallel.
     The Worker Threads module runs CPU-intensive tasks in separate threads inside a single process.
