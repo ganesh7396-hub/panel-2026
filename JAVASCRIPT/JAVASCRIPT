@@ -652,15 +652,22 @@ Changes in one object do not affect the other.
 
 const user = {
   name: "Ganesh",
-  address: { city: "Bangalore" }
+  age: 30,
+  address: {
+    city: "Bangalore",
+    state: "Karnataka"
+  }
 };
 
-const deepCopy = JSON.parse(JSON.stringify(user));
+// Deep copy using structuredClone
+const deepCopy = structuredClone(user);
 
+// Modify copied object
 deepCopy.address.city = "Mumbai";
+deepCopy.name = "Ravi";
 
-console.log(user.address.city); // Bangalore
-
+console.log("Original:", user);
+console.log("Copy:", deepCopy);
 
 Question 7)What is Difference between Arrow and Normal function ?
 
