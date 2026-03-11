@@ -45,6 +45,26 @@ Use gzip compression to reduce response size and improve API response speed.
 10.Check AWS Metrics
 Monitor CPU, memory, network, and disk usage in AWS CloudWatch to detect performance bottlenecks.
 
+Q4 what is database pooling?
+Connection pooling means maintaining a set of open database connections that can be reused by multiple requests instead of creating a new connection each time.
+Creating a database connection is expensive and slow, so pooling improves performance.
+Thread Pooling:-Thread pooling means maintaining a group of worker threads that execute tasks concurrently 
+instead of creating a new thread for each task.
+
+Object pooling:- reuses existing objects instead of creating new ones to reduce memory allocation and improve performance.
+
+Q5 what is Data partitioning ?
+Data partitioning means splitting a large dataset into smaller parts (partitions) so that data can be stored and processed more efficiently.
+
+Q6 What is WebSocket?
+WebSocket is a communication protocol that provides real-time,
+two-way (full-duplex) communication between client and server over a single persistent connection
+Q7 What is a TCP Connection?
+A TCP connection means a reliable communication channel established between a client and a server before data is transferred.
+
+
+
+
 
 
 
