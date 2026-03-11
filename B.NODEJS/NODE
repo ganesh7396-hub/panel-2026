@@ -913,4 +913,46 @@ especially for unstructured or rapidly changing data like social media or analyt
 We choose MySQL when the application requires strong relational data, complex joins, and 
 strict ACID transactions such as banking systems, e-commerce orders, and financial applications
 
+Question 41) What is Docker ? How its working & why they are using?
+Docker is an open-source platform used to build, package, and run applications inside containers.
+A Docker container includes:
+Application code
+Runtime (Node.js, Java, Python etc.)
+Libraries
+Dependencies
+Configuration
+Docker is a containerization platform that allows developers to package applications and 
+their dependencies into lightweight containers so they can run consistently across different environments.
+Before Docker developers faced this issue:
+Developer machine → works
+Production server → fails
+Docker solves this by packaging everything together.
+Application + Dependencies = Container
+
+Before Docker developers faced this issue:
+Developer machine → works
+Production server → fails
+Docker solves this by packaging everything together.
+Application + Dependencies = Container
+
+Question 42 what is container ?
+A Container is a lightweight, portable environment that packages an application with all its dependencies (code, libraries, runtime, configs) so it runs consistently anywhere.
+
+Question 43 what is container Image ?
+👉 In simple words:
+Container = Application + Dependencies + Runtime bundled together.
+A Container Image is a read-only blueprint (template) used to create containers.
+It contains everything required to run an application:
+Application code
+Runtime (Node.js, Python, Java, etc.)
+Libraries
+Dependencies
+Environment configuration
+
+Questions 43 what is Kubernetes ?
+Kubernetes is an open-source container orchestration platform used to automate the deployment
+, scaling, and management of containerized applications.
+It works by organizing containers into pods running on worker nodes within a cluster. The control plane manages scheduling, scaling, networking, and health monitoring. Kubernetes ensures high availability by automatically restarting failed containers, scaling applications based on traffic, and distributing workloads across multiple nodes.
+
+
 
