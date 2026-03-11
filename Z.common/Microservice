@@ -64,3 +64,57 @@ Event-driven architecture
 Requires infrastructure tools:
 Docker
 Kubernetes
+
+
+Monolithic Architecture?
+Monolithic architecture is a traditional software architecture where the entire application is built as a single, unified codebase and deployed as one unit.
+
+Advantages of Monolithic Architecture
+1️ Simple Development
+Everything is inside one project.
+Developers can easily understand the application structure.
+2 Easy Deployment
+Deployment is straightforward.
+Build → Deploy → Run
+3 Faster Communication
+All modules communicate internally within the same process, not over network calls.
+4️ Easier Debugging
+Since everything is in one system:
+Logs
+Stack traces
+Debugging
+
+5️.Lower Infrastructure Complexity
+	Does not require complex infrastructure like:
+	Service discovery
+	API gateways
+	Distributed tracing
+
+Disadvantages of Monolithic Architecture
+1️ Difficult to Scale
+
+You must scale the entire application, even if only one module needs more resources.
+
+2️ .Slow Development for Large Teams
+Large codebases become harder to manage.
+Example:
+
+100+ developers
+
+3.working in same codebase
+Deployment Risk
+Any small change requires redeploying the whole application.
+
+4.Technology Lock-in
+
+All modules must use the same technology stack.
+Example:
+Node.js backend
+Cannot easily add Python ML service
+
+5️.Reduced Fault Isolation
+
+If one module crashes:
+Payment module crash
+→ Entire application may stop
+
