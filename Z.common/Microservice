@@ -114,6 +114,57 @@ Cannot easily add Python ML service
 
 5️.Reduced Fault Isolation
 
+
+Q What is an API Gateway?
+An API Gateway is the single entry point for client requests in a microservices architecture.
+Responsibilities include:
+Request routing
+Authentication
+Rate limiting
+Logging
+Response aggregation
+Example gateway tools include NGINX and Netflix Zuul.
+
+Q What is Service Discovery?
+Service discovery allows microservices to dynamically find and communicate with each other without hardcoding service locations.
+
+Q What is the Saga Pattern?
+The Saga Pattern is used to manage distributed transactions across multiple microservices.
+Instead of a single database transaction:
+Service A → Service B → Service C
+If one service fails, compensating actions roll back previous operations.
+This ensures eventual consistency.
+
+Q What is Circuit Breaker Pattern?
+
+The Circuit Breaker pattern prevents a failing service from repeatedly being called.
+Service A → Service B (failing)
+Circuit opens
+Requests are stopped temporarily
+
+Q How do you handle data consistency in Microservices?
+Since each service has its own database, strong consistency is difficult.
+
+Solutions include:
+Event-driven architecture
+Saga pattern
+Event sourcing
+Message queues
+Goal: eventual consistency across services.
+
+Q How do you scale Microservices?
+
+Microservices scale using:
+Horizontal scaling
+Container orchestration
+Load balancing
+
+Common infrastructure:
+Docker
+Kubernetes
+Only the high traffic service is scaled.
+
+
 If one module crashes:
 Payment module crash
 → Entire application may stop
