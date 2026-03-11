@@ -1,0 +1,66 @@
+
+What is Microservice Architecture?
+
+A Microservice is an architectural style where a large application is split into small, independent services,
+and each service handles one specific business function
+
+Advantages of Microservices:-
+1.Independent Deployment
+Each service can be deployed separately.
+Update Order Service
+without touching User Service
+
+2️.Better Scalability
+Scale only the service that needs it.
+Order service → high traffic → scale only this
+
+3.Fault Isolation
+If one service fails:
+Payment service crash
+User service still works
+
+4.Technology Flexibility
+Different services can use different tech stacks.
+
+Example:
+
+User → Node.js
+Payment → Java
+Analytics → Python
+
+5️.Faster Development
+Different teams work on different services.
+
+Disadvantages of Microservices
+1.Complex Architecture
+
+More services = more complexity.
+Need to manage:
+service discovery
+monitoring
+deployment
+
+2.Network Latency
+Services communicate over network.
+API → API → API
+slower than internal calls.
+
+3.Distributed Debugging
+
+Harder to debug issues across multiple services.
+Need tools like:
+Jaeger
+Prometheus
+
+4️.Data Consistency Issues
+
+Multiple databases make transactions difficult.
+Need patterns like:
+Saga Pattern
+Event-driven architecture
+
+5.DevOps Complexity
+
+Requires infrastructure tools:
+Docker
+Kubernetes
