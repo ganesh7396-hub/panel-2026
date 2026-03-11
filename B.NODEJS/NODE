@@ -740,10 +740,18 @@ Question 28)How many types of status code in node js ?
 
 Question 29)How do you handle memory leaks in node js ?
 
-memory leaks:-
+memory leaks:-memory leak happens when a program uses memory but does not release it after finishing the task.
+Because of this, memory usage keeps increasing and the application eventually becomes slow or crashes
 
 A memory leak happens when unused memory is not released, 
 causing the application to consume more and more memory over time.
+
+Global variables storing data
+Unclosed database connections
+Event listeners not removed
+Large objects stored in memory
+Improper caching
+Infinite loops storing data
 
 Unused Variables & Global Objects:-
 Avoid unnecessary global variables
