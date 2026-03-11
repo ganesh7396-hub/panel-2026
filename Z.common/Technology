@@ -10,4 +10,41 @@ Q2 What is Git and GitHub?
   GitHub is a cloud platform that hosts Git repositories and provides collaboration features like pull requests and code reviews.
   Developers typically clone a repo, create branches, commit changes, push them to GitHub, and merge them through pull requests after review.
   
-Q3
+Q3 I developed a small application using Node.js, Express.js, and MongoDB. It works fast on my local machine, 
+but after deploying it to AWS EC2 the API responses become slow. How can I find the cause of the slow performance?
+1️⃣ Check EC2 CPU / memory
+2️⃣ Check Node.js logs
+3️⃣ Measure API response time
+4️⃣ Check MongoDB queries and indexes
+5️⃣ Check network latency
+6️⃣ Enable slow API logging
+7️⃣ Check event loop blocking
+8️⃣ Run Node in cluster mode
+9️⃣ Enable compression
+🔟 Check AWS metrics
+
+1.Check EC2 CPU / Memory
+SSH into the server and run top or htop to see if CPU or memory usage is high, which can slow down the application
+2.Check Node.js Logs
+Check application logs (for example pm2 logs or console logs) to identify errors, crashes, or slow database calls.
+3.Measure API Response Time
+Use tools like curl or Postman to measure how long the API takes to respond.
+4️. Check MongoDB Queries and Indexes
+Verify that database queries are optimized and indexes exist for frequently searched fields.
+5.heck the network delay between EC2 and database using commands like:
+ping mongodb-host
+High latency can slow API responses.
+6️.Enable Slow API Logging
+Add middleware to log request execution time and identify slow endpoints.
+7️.Check Event Loop Blocking
+Ensure no heavy synchronous operations (like large loops or blocking code) that block the Node.js event loop.
+8️.Run Node in Cluster Mode
+Use PM2 cluster mode so Node.js can utilize all CPU cores.
+9️. Enable Compression
+Use gzip compression to reduce response size and improve API response speed.
+10.Check AWS Metrics
+Monitor CPU, memory, network, and disk usage in AWS CloudWatch to detect performance bottlenecks.
+
+
+
+
