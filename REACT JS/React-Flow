@@ -1,0 +1,731 @@
+Q1 What is React?
+
+React
+----
+React is a JavaScript library created by Facebook for building user interfaces, especially
+single-page applications (SPAs).
+It helps developers build reusable UI components that can manage their own state,
+which makes it easier to build complex applications.
+
+Q2 What are React features?
+
+Key features include:
+--------------------
+Component-based architecture: Developers can break the UI into small, reusable
+components.
+
+Virtual DOM: React updates the UI eciently by calculating dierences between
+the new and old DOM trees.
+
+Declarative UI: You describe how the UI should look for any given state, and React
+manages the rendering.
+
+One-way data binding: Data flow from parent to child components, making state
+management predictable.
+
+JSX syntax: Allows mixing HTML and JavaScript, making component structure
+more readable.
+
+
+Q3 What is the Virtual DOM? What is the Real DOM?
+
+virtual DOM :-
+----------
+The virtual DOM is a lightweight copy of the actual DOM that helps React eciently
+update the UI by comparing changes before applying them to the real DOM.
+
+When the state or props of a component change, React doesn’t update the actual DOM
+immediately. Instead, it creates a virtual representation of the DOM, compares it with
+the previous version, and identies what’s dierent. This process, known as “ding” or
+“reconciliation,” allows React to update only the necessary parts, improving
+performance.
+
+Real DOM:-
+-------
+The Real DOM is the browser’s actual tree structure that represents the HTML on the page.
+ Any change to it immediately affects what the user sees
+
+Managed by the browser
+Direct updates are slow and expensive
+Causes reflow and repaint
+Heavy structure
+
+Q4 What is JSX and how does it work?
+
+JSX:
+---
+JSX (JavaScript XML) is a syntax extension that allows writing HTML-like code inside
+JavaScript. It makes dening UI structures more intuitive.
+JSX is not understood by browsers directly, so tools like Babel transpile it into
+React.createElement() calls.
+Example:
+const element = <div>Hello, world!</div>;
+Is transpiled to:
+const element = React.createElement('div', null, 'Hello, world!');
+
+Q5 What are state and props?
+
+State: Internal data managed by the component, can change over time.
+Props: External data passed from parent components, read-only within the
+component
+
+
+function Counter() {
+const [count, setCount] = React.useState(0); // state
+return (
+<div>
+<p>Count: {count}</p>
+<button onClick={() => setCount(count + 1)}>Increment</button>
+</div>
+);
+}
+Passing Props from Parent to Child Component :-
+
+import React from "react";
+import User from "./User";
+
+function App() {
+  const name = "Shiva";
+  const age = 25;
+
+  return (
+    <div>
+      <h1>Parent Component</h1>
+      <User userName={name} userAge={age} />
+    </div>
+  );
+}
+
+export default App;
+
+Child Component (User.js)
+import React from "react";
+
+function User(props) {
+  return (
+    <div>
+      <h2>Child Component</h2>
+      <p>Name: {props.userName}</p>
+      <p>Age: {props.userAge}</p>
+    </div>
+  );
+}
+
+Q6 What is prop drilling?
+
+Prop drilling is passing props from a parent to a deeply nested child
+through multiple components that don’t actually use the data.
+
+Simple & Short Prop Drilling Example
+
+App → Child → GrandChild
+
+App.jsx
+function App() {
+  const name = "Ganesh";
+  return <Child name={name} />;
+}
+Child.jsx (does NOT use name ❗)
+function Child({ name }) {
+  return <GrandChild name={name} />;
+}
+GrandChild.jsx (actual usage)
+function GrandChild({ name }) {
+  return <h1>Hello {name}</h1>;
+}
+
+
+Q7 What is the key prop in React?
+
+The key prop helps React uniquely identify elements in a list. It optimizes rendering by
+tracking which items changed, were added, or removed.
+
+const items = [
+{ id: 1, value: 'Apple' },
+{ id: 2, value: 'Banana' }
+];
+function ItemList() {
+return (
+<ul>
+{items.map(item => (
+<li key={item.id}>{item.value}</li>
+))}
+</ul>
+);
+}
+
+Q8 What are React Fragments used for?
+
+React Fragments allow you to group multiple elements without adding extra nodes to
+the DOM. It’s useful when you want to return multiple elements from a component
+without introducing unnecessary wrappers.
+
+import React from 'react';
+function List() {
+return (
+<>
+<li>Item 1</li>
+<li>Item 2</li>
+<li>Item 3</li>
+</>
+);
+
+Q9 What are the features of Hooks?
+Hooks allow functional components to use state and other React features without
+writing classes.
+
+Explanation:
+Simpler code: Eliminates the need for class components and lifecycle methods.
+Reusable logic: Custom hooks allow encapsulating stateful logic.
+Better readability: Clear separation of state and effects
+Functional approach: Encourages a functional programming style, making code
+easier to test and maintain.
+
+
+Q10 What are the rules of React hooks?
+Hooks have rules to ensure predictable behavior and maintain component integrity.
+Explanation:
+1. Call hooks at the top level: Don’t call inside loops, conditions, or nested functions.
+2. Call hooks only in React functions: Functional components or custom hooks.
+3. Custom hooks must start with “use”: Helps React identify hook calls.
+
+Q11 How do you reset a component’s state in React?
+Resetting a component’s state means restoring it to its initial values, often used after
+form submissions or when navigating between views.
+
+
+State in React is mutable through setState or the useState hook. To reset it, you
+simply assign the initial state again. This ensures the component’s UI reects the reset
+state
+
+import React, { useState } from 'react';
+const initialState = { name: '', email: '' };
+function Form() {
+const [formData, setFormData] = useState(initialState);
+const handleReset = () => {
+setFormData(initialState);
+};
+return (
+<div>
+<input
+value={formData.name}
+onChange={(e) => setFormData({ ...formData,
+name: e.target.value })}
+placeholder="Name"
+/>
+<input
+value={formData.email}
+onChange={(e) => setFormData({ ...formData,
+email: e.target.value })}
+placeholder="Email"
+/>
+<button onClick={handleReset}>Reset</button>
+</div>
+);
+}
+export default Form;
+
+Q12 How do you debug your React application?
+
+Debugging in React involves inspecting component trees, checking state and props, and
+identifying errors using browser tools and libraries.
+
+1. React Developer Tools: Inspect the component hierarchy, state, and props.
+2. Console logs: Use console.log() to trace state updates or errors.
+3. Breakpoints: Set breakpoints in browser DevTools to step through code.
+4. Error boundaries: Catch rendering errors and inspect stack traces.
+5. Network inspection: Check API requests and responses.
+
+Q13 Define useState with example.
+
+useState is a React Hook that allows functional components to manage and update local state, 
+and automatically re-render the component when the state changes.
+import { useState } from "react";
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <h1>{count}</h1>
+      <button onClick={() => setCount(count + 1)}>
+        Increment
+      </button>
+    </div>
+  );
+}
+
+Q14 Define useEffect with example.
+
+useEffect:-
+---------
+useEffect is a React Hook used to perform side effects in functional components,
+such as API calls, subscriptions, timers, or DOM updates.
+
+import { useEffect, useState } from "react";
+
+function Users() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then(res => res.json())
+      .then(result => setData(result));
+  }, []);
+
+  return <div>Total Users: {data.length}</div>;
+}
+
+
+Q15 Define useContext with example 
+
+useContext:-
+
+The Context API provides a way to share state across the component tree without
+passing props through every level
+
+React’s Context API allows data to be passed globally through the component hierarchy,
+making it useful for themes, user data, or settings that multiple components need to
+access.
+It helps avoid “prop drilling,” where props are passed through many intermediate
+components unnecessarily.
+
+Steps to use Context:
+1. Create a context.
+
+UserContext.js
+import {createContext} from "react"
+export const UserContext=createContext();
+
+2. Wrap components with a provider.
+
+import './App.css';
+import { UserContext } from './UserContext';
+import Profile from './Profile';
+
+function App() {
+  const user = { name: "Ganesh", role: "admin" };
+
+  return (
+    <UserContext.Provider value={user}>
+      <Profile />
+    </UserContext.Provider>
+  );
+}
+
+export default App;
+
+3. Use the context in child components via useContext .
+Profile.js
+
+import { useContext } from "react";
+import { UserContext } from "./UserContext";
+ export default function Profile(){
+    const user=useContext(UserContext);
+    return(
+        <>
+        
+        <h2> {user.name}</h2>
+        </>
+    )
+}
+
+Q16 Define useReducer with example 
+useReducer :
+----------
+useReducer is a hook that manages complex state logic by using a reducer function. It’s
+an alternative to useState , suitable when state has multiple sub-values or when the
+next state depends on the previous state.
+
+
+A reducer is a function that takes the current state and an action, and returns a new
+state. useReducer provides a more structured way of updating state, especially when
+state transitions are complex or require multiple branches of logic.
+
+import React, { useReducer } from 'react';
+
+const initialState = { count: 0 };
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1 };
+
+    case 'decrement':
+      return { count: state.count - 1 };
+
+    default:
+      throw new Error('Unknown action');
+  }
+}
+
+function Counter() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <div>
+      <h1>Count: {state.count}</h1>
+
+      <button onClick={() => dispatch({ type: 'increment' })}>
+        +
+      </button>
+
+      <button onClick={() => dispatch({ type: 'decrement' })}>
+        -
+      </button>
+    </div>
+  );
+}
+
+export default Counter;
+
+Q17 Define useMemo with example. ?
+
+useMemo is a React hook that memoizes the result of a function so that it is only
+recalculated when its dependencies change. This helps avoid expensive computations
+on every render and improves performance
+
+
+
+import React, { useState, useMemo } from "react";
+
+const UseMemo = () => {
+  const [count, setCount] = useState(0);
+  const [text, setText] = useState("");
+
+//   const factorial = computeFactorial(count);
+  
+  const factorial =useMemo(() => {
+    console.log("🔥 calculating factorial...");
+    return computeFactorial(count);
+  }, [count]);
+
+  return (
+    <div>
+      <h1>
+        Factorial of {count} is {factorial}
+      </h1>
+
+      <button onClick={() => setCount((prev) => prev + 1)}>
+        Increment
+      </button>
+
+      <br /><br />
+
+      <input
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="Type here"
+      />
+    </div>
+  );
+};
+
+function computeFactorial(n) {
+    console.log("calculating why")
+  if (n <= 0) return 1;
+  return n * computeFactorial(n - 1);
+}
+
+export default UseMemo;
+
+
+Q18 Define useCallback with example.
+
+
+useCallback memoizes functions so that they are only recreated when dependencies
+change. It’s a performance optimization that prevents unnecessary rerenders, especially
+in child components.
+
+
+import { useCallback, useState } from "react";
+import Child from "./Child";
+
+const Parent =()=>{
+    const [count, setCount] = useState(0);
+
+
+    //   const increment = () => {
+    //     setCount((c) => c + 1);
+    //     };
+
+    const increment = useCallback(() => {
+setCount(c => c + 1);
+}, []);
+
+return(
+    <div>
+        {count}
+        <Child onIncrement ={increment}></Child>
+    </div>
+   
+)
+}
+
+export default Parent;
+
+import React from "react";
+
+const Child = ({ onIncrement }) => {
+  // ✅ proper destructuring
+
+  return (
+    <div>
+      <button onClick={onIncrement}>
+        Increment from Child
+      </button>
+    </div>
+  );
+};
+
+export default Child;
+
+
+Q19 Define useRef with example.
+useRef creates a persistent reference that doesn’t cause rerenders when updated. It’s
+commonly used to access DOM elements or keep mutable state across renders.
+Useful for:
+Accessing DOM nodes
+Storing previous state
+Holding intervals or timers
+Managing focus
+import React from 'react';
+import {useEffect,useRef, useState } from 'react'
+
+function App() {
+const inputRef = useRef(null)
+
+useEffect(()=>{
+  
+  inputRef.current.focus()
+  
+})
+  
+
+
+  return (
+    <div>
+    
+    <input type="text" ref={inputRef}/>
+    </div>
+  )
+}
+
+export default App
+
+Q20) What is the difference between controlled and uncontrolled components?
+
+Controlled components are form inputs whose values are managed by React state.
+Uncontrolled components maintain their own internal state and are accessed via refs.
+
+Controlled: The state is the single source of truth. Input value is tied to state and
+updated via onChange .
+Uncontrolled: Input value is stored in the DOM. Accessed using ref when
+needed.
+
+
+function ControlledInput() {
+		const [value, setValue] = React.useState('');
+		return <input
+		value={value}
+		onChange={(e) => setValue(e.target.value)}
+		/>;
+	}
+
+	function UncontrolledInput() {
+		const inputRef = React.useRef();
+		const handleClick = () => {
+		alert(inputRef.current.value);
+		};
+		return (
+		<>
+		<input ref={inputRef} />
+		<button onClick={handleClick}>Show Value</button>
+		</>
+		);
+	}
+	
+	
+	
+Q21 What is the difference between useEffect and useLayoutEffect?
+
+useEffect :useEffect is a React Hook that runs side effects 
+after the component has rendered and the browser has painted the screen.
+
+useLayoutEffect: is a React Hook that runs synchronously after the DOM has been updated but before the browser paints the screen.
+When to use each:
+useEffect :
+Fetching data after initial render
+Adding event listeners or subscriptions
+Performing actions that don’t aect layout calculations
+useLayoutEffect :
+Measuring DOM elements before paint
+Synchronously updating DOM styles
+Adjusting scroll position or animations before user interactionss
+
+Q22 What does the dependency array of useEffect affect?
+
+The dependency array determines when the effect should be re-executed after renders.
+It’s crucial to manage this correctly to avoid unnecessary reruns or stale data.
+
+Explanation:
+If the dependency array is empty ( [] ), the effect runs once after the initial render.
+If the array includes variables, the effect runs whenever one of them changes.
+If omitted, the effect runs after every render, which can lead to performance
+
+import React, { useState, useEffect } from 'react';
+function Timer() {
+const [count, setCount] = useState(0);
+
+useEffect(() => {
+© 2025 NamasteDev | Empowering developers to build, learn, and grow 21/109
+console.log('Effect runs');
+const interval = setInterval(() => {
+setCount(c => c + 1);
+}, 1000);
+return () => clearInterval(interval);
+}, []); // Empty array: effect runs once on mount
+return <div>Count: {count}</div>;
+}
+
+Q23 What is the useId hook in React and when should it be used?
+
+useId generates unique IDs that are stable across server and client renders. It is
+particularly useful for linking form elements, labels, and other accessibility-related
+attributes
+
+
+
+
+import React, { useId } from 'react';
+function LoginForm() {
+const id = useId();
+return (
+<form>
+<label htmlFor={id}>Username:</label>
+<input id={id} type="text" />
+</form>
+);
+
+
+Q24 What are error boundaries in React for?
+
+Error boundaries are special React components that catch errors in their child
+components during rendering, lifecycle methods, or constructors, preventing the entire
+app from crashing
+
+Q25 How do you test React applications?
+
+Testing ensures that React components behave as expected. You can use libraries like
+Jest and React Testing Library to write unit, integration, and end-to-end tests.
+Explanation:
+Testing helps catch bugs early and ensures UI correctness. Jest is a test runner and
+assertion library, while React Testing Library simulates user interactions and veries
+component behavior without relying on implementation details.
+
+Types of tests:
+1. Unit tests: Test individual components or functions.
+2. Integration tests: Verify how components interact together.
+3. End-to-end tests: Test full workows, often using tools like Cypress.
+
+Q26 What is Redux? What is Redux Thunk used for?
+
+Redux is a state management library used mainly with React to manage global application state in a predictable way.
+Instead of passing data through many components (prop drilling), Redux stores the state in one central place called the Store.
+Store → Central place where application state is stored
+
+Action → Object that describes what happened
+Reducer → Function that updates the state
+Dispatch → Sends an action to the reducer
+
+Redux Thunk Use :
+Redux Thunk is a middleware that allows you to write asynchronous logic inside Redux actions.
+By default Redux only supports synchronous actions.
+
+Q27 Explain the difference between shallow rendering and full DOM
+rendering in React testing
+
+In testing, shallow rendering and full DOM rendering are two different approaches to
+isolate component behavior
+
+
+Shallow rendering:
+
+Renders the component without rendering its child components.
+Used to test a component’s output in isolation.
+Provided by tools like 
+Full DOM rendering:
+enzyme 
+
+
+Full DOM rendering:
+enzyme .
+Renders the entire component tree.
+Suitable for integration tests where you need to interact with nested components
+or lifecycle methods
+
+import { shallow, mount } from 'enzyme';
+import MyComponent from './MyComponent';
+test('shallow test', () => {
+const wrapper = shallow(<MyComponent />);
+expect(wrapper.find('button').exists()).toBe(true);
+});
+test('full render test', () => {
+const wrapper = mount(<MyComponent />);
+expect(wrapper.find('ChildComponent').length).toBe(1);
+})
+
+
+
+Q28  How do you handle accessibility (a11y) in a React application?
+
+Accessibility ensures that your application can be used by people with disabilities. React
+encourages semantic HTML and attributes like 
+Key techniques:
+
+Use semantic elements like 
+aria-* to improve accessibility.
+<button> , 
+<nav> , 
+<form> .
+Add 
+aria-label , 
+aria-describedby , and 
+aria-expanded where needed.
+Ensure proper keyboard navigation (using 
+tabIndex , etc.).
+Manage focus for modals or dialogs.
+Use libraries like 
+react-aria or 
+react-axe to audit accessibility
+
+
+Q29 What is a custom hook? Why should we use custom hooks?
+
+Custom hooks are reusable functions that use React hooks internally.
+They encapsulate stateful logic and can be shared across multiple components.
+
+import { useState, useEffect } from 'react';
+function useFetch(url) {
+const [data, setData] = useState(null);
+const [loading, setLoading] = useState(true);
+useEffect(() => {
+
+async function fetchData() {
+const res = await fetch(url);
+const result = await res.json();
+setData(result);
+setLoading(false);
+}
+fetchData();
+}, [url]);
+return { data, loading };
+}
+// Usage
+function App() {
+const { data, loading } = useFetch('https://api.example.com/data');
+return loading ? 
+<p>Loading...</p> : 
+<pre>{JSON.stringify(data)}</pre>;
+}
+
