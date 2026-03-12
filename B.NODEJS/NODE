@@ -954,5 +954,11 @@ Kubernetes is an open-source container orchestration platform used to automate t
 , scaling, and management of containerized applications.
 It works by organizing containers into pods running on worker nodes within a cluster. The control plane manages scheduling, scaling, networking, and health monitoring. Kubernetes ensures high availability by automatically restarting failed containers, scaling applications based on traffic, and distributing workloads across multiple nodes.
 
-
+Question 44 what is Authentication/Authorization?
+Authentication is the process of verifying the identity of a user.
+It checks who the user is using credentials like username and password, OTP, or tokens (JWT).
+Example:When you log in with email and password, the system verifies your identity.
+Authorization:Authorization is the process of checking what a user is allowed to access or do after they are authenticated.
+Example:Admin can delete users
+Normal user can only view their own profile
 
