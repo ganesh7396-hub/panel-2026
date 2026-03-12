@@ -61,7 +61,17 @@ WebSocket is a communication protocol that provides real-time,
 two-way (full-duplex) communication between client and server over a single persistent connection
 Q7 What is a TCP Connection?
 A TCP connection means a reliable communication channel established between a client and a server before data is transferred.
+Avoid blocking the event loop → move CPU tasks to worker threads or queues.
 
+Q prevent your Node.js application from crashing when the traffic exceeds 10k concurrent requests
+Avoid blocking the event loop → move CPU tasks to worker threads or queues.
+Use cluster to utilize all CPU cores.
+Horizontal scaling → multiple instances + load balancer.
+Use caching (Redis) to reduce DB load.
+Implement rate limiting to prevent overload.
+Offload heavy tasks to queues (Bull, RabbitMQ).
+Monitor and auto-restart using PM2 or Docker.
+Optional: Use CDN for static assets.
 
 
 
