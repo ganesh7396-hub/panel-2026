@@ -962,3 +962,89 @@ Authorization:Authorization is the process of checking what a user is allowed to
 Example:Admin can delete users
 Normal user can only view their own profile
 
+Question 45 What is Thread in Node.js
+A thread is the smallest unit of execution in a process.
+In Node.js, JavaScript runs on a single main thread, 
+but background tasks are handled using worker threads or a thread pool.
+
+How it works (Easy flow)
+-----------------------
+Request comes in
+Main thread (event loop) handles it
+If task is simple → executes immediately
+If task is heavy → sent to Thread Pool
+Result comes back → response sent
+
+Question 46) What is Thread Pool in Node.js?
+Node.js is single-threaded, but it uses a Thread Pool to handle heavy tasks in the background.
+A Thread Pool is a group of worker threads (managed by libuv) used to execute blocking
+time-consuming operations, so the main thread (Event Loop) is not blocked.
+
+Why Thread Pool is needed?
+👉 Node.js runs on one main thread (Event Loop)
+👉 Heavy tasks like:
+File reading
+Encryption (bcrypt, crypto)
+Compression
+DNS
+
+❌ If handled directly → blocks the server
+✔️ So they are offloaded to the Thread Pool
+
+Default thread pool size = 4
+Can increase using:
+UV_THREADPOOL_SIZE=8
+Managed by libuv (Node.js internal library)
+
+Question 47) Explain the event -loop phases ?
+
+1️⃣ Timers Phase:-
+👉 Runs callbacks of:
+setTimeout()
+setInterval()
+
+2️⃣ Pending Callbacks:-
+👉 Runs some system-level callbacks (like errors, TCP issues)
+👉 Not commonly used in daily coding
+✔️ Interview tip: just say
+👉 “Used for system I/O callbacks”
+
+3️⃣ Idle / Prepare
+👉 Internal phase (Node.js uses it)
+👉 ❌ No need to explain deeply
+
+4️⃣ Poll Phase (🔥 Most Important)
+👉 This is the main phase
+✔️ Handles:
+File reading (fs)
+API calls
+Database calls
+👉 “Most real work happens here”
+
+5️⃣ Check Phase
+👉 Runs:
+setImmediate()
+✔️ Example:
+setImmediate(() => {
+  console.log("Immediate");
+});
+
+
+6️⃣Close Callbacks
+
+👉 Runs when things are closed:
+socket close
+server close
+
+✔️ Example:
+socket.on("close", () => {
+  console.log("Closed");
+});
+
+
+process.nextTick() and Promises in the Event Loop
+Apart from these phases there is also process.nextTick() and promise callback which has the highest priority in the event loop. It executes after every phase before moving to the next phase.
+
+process.nextTick() callbacks are always executed before the event loop moves to the next phase.
+Resolved Promise callbacks are processed immediately after process.nextTick().
+
