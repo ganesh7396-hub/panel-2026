@@ -232,6 +232,10 @@ query {
   }
 }
 
+edges → List of items (with metadata)
+node → Actual data (your record)
+cursor → Pointer used for pagination (next/previous page)
+
 
 Question 11) What are the  Common GraphQL Tools?
 
