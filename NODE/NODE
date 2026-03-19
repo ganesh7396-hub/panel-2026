@@ -906,4 +906,492 @@ We choose MySQL when the application requires strong relational data, complex jo
 strict ACID transactions such as banking systems, e-commerce orders, and financial applications
 
 
+Question 41)How you can decide when we installl dev package and when we use production package?
+
+1. Production Dependencies
+	npm install express
+	These are required for your app to run in production
+	Without them → app will break
+	👉 Examples:
+	express (server)
+	mongoose (DB)
+	jsonwebtoken (auth)
+
+2. Development Dependencies
+	npm install nodemon --save-dev
+	These are used only during development
+	Not needed when app is running in production
+	👉 Examples:
+	nodemon (auto restart)
+	eslint (linting)
+	jest (testing)
+	typescript
+	
+Production Behavior
+
+When deploying:
+	npm install --production
+	👉 Only installs:
+	dependencies
+	👉 Skips:
+	devDependencies
+	💡 This makes app:
+	Faster
+	Secure
+	Lightweight
+	
+
+Question 42)What is a Thread?
+A thread is the smallest unit of execution. 
+In Node.js, JavaScript runs on a single main thread, 
+which handles the event loop and executes code. However, Node.js uses libuv internally,
+which provides a thread pool to handle asynchronous and blocking operations like file system,
+DNS, and crypto tasks. This allows Node.js to be non-blocking and efficient.
+	
+Question 43)What is a Thread Pool?
+A thread pool is a collection of pre-created worker threads used to execute background tasks.
+A thread pool is a group of worker threads used to execute background tasks. 
+In Node.js, libuv provides a thread pool (default size 4) to handle blocking operations like file system, crypto, DNS, and compression. 
+When such a task is encountered, Node.js delegates it to the thread pool,
+ allowing the main thread to remain non-blocking.
+ Once the task is completed, the result is sent back to the event loop for execution.
+ 
+Question 44)How Many Phases in Node.js Event Loop?
+6 Phases of Event Loop (In Order)
+1. Timers Phase
+	👉 Executes:
+	setTimeout()
+	setInterval()
+
+2. Pending Callbacks Phase
+	👉 Executes:
+	Some system-level callbacks
+	(e.g., TCP errors, network errors)
+
+3. Idle / Prepare Phase
+	👉 Internal use only
+	(Not important for interviews)
+
+4. Poll Phase ⭐ (Most Important)
+	👉 Handles:
+	I/O callbacks (DB, file system, API)
+	👉 Also:
+	Waits for new events if queue is empty
+
+5. Check Phase
+	👉 Executes:
+	setImmediate()
+
+6. Close Callbacks Phase
+
+	👉 Executes:
+	socket.on('close', ...)
+	 
+
+
+		Timers
+		   ↓
+		Pending Callbacks
+		   ↓
+		Idle / Prepare
+		   ↓
+		Poll  ⭐
+		   ↓
+		Check
+		   ↓
+		Close Callbacks
+		
+Question 45)What is libuv?
+libuv is a C library used by Node.js to handle asynchronous (non-blocking) operations like file system, network, and timers.
+🚀 Why libuv is Needed?
+👉 JavaScript in Node.js runs on a single thread
+❌ Problem:
+If one task is slow → app blocks
+
+✅ Solution:
+libuv handles tasks in background → keeps app fast
+libuv is a core C library used by Node.js to handle asynchronous and non-blocking operations. It provides the event loop, thread pool, and handles I/O operations like file system and network requests. When a blocking task occurs, Node.js delegates it to libuv, which processes it in the background using the OS or thread pool, and once completed, the result is returned to the event loop for execution. This is how Node.js achieves high performance and scalability.
+
+
+
+Question 46)When a user uploads an image, how do you reduce its size in Node.js?
+
+Why Sharp?
+Very fast (uses native C++ under the hood)
+Supports resize, compress, format change
+Production-ready
+
+npm install express multer sharp
+
+const express = require("express");
+const multer = require("multer");
+const sharp = require("sharp");
+const path = require("path");
+
+const app = express();
+
+// store file in memory
+const upload = multer({ storage: multer.memoryStorage() });
+
+app.post("/upload", upload.single("image"), async (req, res) => {
+  try {
+    const fileBuffer = req.file.buffer;
+
+    // resize + compress
+    const compressedImage = await sharp(fileBuffer)
+      .resize(800) // width
+      .jpeg({ quality: 70 }) // compress
+      .toBuffer();
+
+    // save to disk
+    const fileName = `compressed-${Date.now()}.jpg`;
+
+    require("fs").writeFileSync(
+      path.join(__dirname, "uploads", fileName),
+      compressedImage
+    );
+
+    res.send("Image uploaded and compressed!");
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+
+app.listen(3000, () => console.log("Server running"));
+What We Did
+
+👉 Used:
+multer → to handle file upload
+sharp → to reduce size
+👉 Techniques:
+Resize image (.resize(800))
+Compress quality (quality: 70)
+Convert format (jpeg)
+
+
+
+Question 47)What is Data Partitioning in MongoDB?
+
+Data partitioning means splitting large data into smaller parts and storing them across multiple servers or collections.
+
+Question 48)How do you handle high traffic (e.g., 10,000 requests) and avoid timeouts in Node.js?
+
+	1. 🧩 Horizontal Scaling (Very Important)
+		👉 Run multiple instances of Node.js using:
+		PM2
+		Docker / Kubernetes
+		pm2 start app.js -i max
+		
+	👉 Uses all CPU cores → handles more requests
+
+	2. ⚖️ Load Balancer
+		👉 Distribute traffic across servers using:
+		NGINX
+		AWS ELB
+		👉 Prevents single server overload
+
+	3. ⚡ Caching (Huge Impact)
+		👉 Use:
+		Redis
+		👉 Example:
+		Cache API responses
+		Reduce DB calls
+
+	4. 🔄 Asynchronous & Non-Blocking Code
+
+		❌ Bad:
+		const data = fs.readFileSync("file.txt");
+		✅ Good:
+		fs.readFile("file.txt", () => {});
+		👉 Prevents blocking of event loop
+
+	5. 📬 Queue System (For Heavy Tasks)
+
+		👉 Use:
+		Bull
+		👉 Move heavy work:
+		Image processing
+		Email sending
+		API → Queue → Worker → Process → Response
+	6. 🧠 Database Optimization
+		👉 Techniques:
+		Indexing
+		Pagination
+		Connection pooling
+		👉 Avoid:
+		SELECT * FROM users; ❌
+	7. ⏱️ Timeout Handling
+		👉 Set timeout:
+		server.timeout = 5000;
+		👉 Use retry logic (for external APIs)
+	8. 📉 Rate Limiting
+		👉 Prevent overload using:
+		express-rate-limit
+		limit: 100 requests / minute
+	9. 🌐 CDN (For Static Content)
+		👉 Use CDN for:
+		Images
+		JS/CSS
+		👉 Reduces backend load
+
+	10. 🔍 Monitoring & Logging
+		👉 Tools:
+		Prometheus
+		Grafana
+		👉 Helps detect bottlenecks
+		
+		
+Question 49)what is TCP && webSocket && webpack ?
+TCP :-
+1. What is TCP?
+
+👉 Transmission Control Protocol (TCP) is a low-level communication protocol used for sending data over the network.
+Key Points
+Connection-oriented (requires handshake)
+Reliable (guarantees delivery)
+Ordered (data arrives in sequence)
+
+const net = require("net");
+
+const server = net.createServer((socket) => {
+  socket.write("Hello from TCP server");
+  socket.on("data", (data) => {
+    console.log("Received:", data.toString());
+  });
+});
+
+server.listen(3000, () => {
+  console.log("TCP Server running on port 3000");
+});
+
+💡 Real-Life Use
+Database connections
+Internal microservices communication
+Low-level network apps
+
+webSocket:-
+
+👉 WebSocket is a protocol built on top of TCP for real-time communication between client and server.
+Key Points
+Full-duplex (two-way communication)
+Persistent connection
+Works over HTTP (initial handshake)
+
+Node.js Example (WebSocket)
+const WebSocket = require("ws");
+
+const wss = new WebSocket.Server({ port: 3000 });
+
+wss.on("connection", (ws) => {
+  ws.send("Hello Client");
+
+  ws.on("message", (message) => {
+    console.log("Received:", message.toString());
+  });
+});
+
+
+Real-Life Use
+Chat applications
+Live notifications
+Real-time dashboards
+Gaming apps
+
+
+
+| Feature       | TCP                | WebSocket           |
+| ------------- | ------------------ | ------------------- |
+| Level         | Low-level protocol | High-level protocol |
+| Built on      | OS level           | Built on TCP        |
+| Communication | Raw data           | Structured messages |
+| Use case      | Backend systems    | Real-time apps      |
+| Complexity    | More complex       | Easier to use       |
+
+webpack:-
+Webpack is a module bundler that takes multiple files and dependencies and combines them into a single 
+or optimized set of files for better performance in the browser.
+
+Question 50)What is database pooling? different types pooling ?
+Database pooling is a technique where a pool of database connections is maintained and reused across multiple requests instead of creating a new connection each time. 
+This improves performance, reduces latency, and prevents database overload.
+Common types include connection pooling, session pooling, and transaction pooling.
+
+Question 51)
+I developed an application using Node.js, Express.js, and MongoDB. It works fast locally, but after deploying to the server, the API response becomes slow. Why does this happen and how would you identify the issue?
+
+1. 🔍 Check Server Resources
+	👉 First check:
+	CPU usage
+	Memory
+	Disk I/O
+	👉 Tools:
+	top, htop
+	👉 Problem:
+	High CPU → blocking code
+	Low memory → crashes / slow
+
+2. 🌐 Check Network Latency
+	👉 Local → fast (no network delay)
+	👉 Server → may have:
+	High latency
+	Slow DNS
+	Firewall issues
+	👉 Test:
+	ping your-api.com
+3. 🧠 Check Event Loop Blocking
+	👉 Node.js is single-threaded
+	❌ Bad code:
+	fs.readFileSync("file.txt"); // blocks
+	👉 Detect using:
+	clinic.js
+
+4. 🗄️ Check MongoDB Queries
+	👉 Most common issue 🔥
+	Problems:
+	No indexes
+	Full collection scan
+	Large data
+	👉 Fix:
+	db.users.createIndex({ email: 1 });
+	👉 Use:
+	.explain("executionStats")
+5. 🔄 Check Database Connection Pool
+	👉 Problem:
+	Too many requests → limited connections
+	👉 Fix:
+	Increase pool size in MongoDB config
+6. 📦 Check API Response Size
+
+	👉 Large JSON response slows API
+	❌ Bad:
+	res.json(allUsers); // huge data
+	✅ Fix:
+	Pagination
+	.limit(10).skip(0)
+7. ⚡ Add Caching
+	👉 Use:
+	Redis
+	👉 Cache frequent APIs
+
+8. 🧵 Check Concurrency / Load
+	👉 Server may not handle traffic
+	👉 Use:
+	PM2
+	pm2 start app.js -i max
+9. 📊 Logging & Monitoring
+	👉 Add logs:
+	console.time("API");
+	console.timeEnd("API");
+	👉 Tools:
+	Grafana
+	Prometheus
+
+10. 🔥 Check External APIs
+	👉 If calling third-party APIs:
+	They may be slow
+	Add timeout & retry
+	
+	Slow API
+	↓
+	Check CPU / Memory
+	↓
+	Check DB Query
+	↓
+	Check Network
+	↓
+	Check Code Blocking
+	↓
+	Add Caching / Scaling
+	
+	Question 52)Security of application in node js?
+🔐 1. Input Validation (Prevent Injection Attacks)
+	👉 Validate all user inputs
+	if (!email || !password) {
+	  return res.status(400).send("Invalid input");
+	}
+	👉 Use libraries:
+	express-validator
+	Joi
+
+🔑 2. Password Hashing (Very Important)
+	👉 Never store plain passwords ❌
+	👉 Use:
+	bcrypt
+	const hashed = await bcrypt.hash(password, 10);
+🔐 3. Authentication & Authorization
+	👉 Use JWT for authentication
+	const token = jwt.sign({ userId }, "secret");
+	👉 Authorization:
+	Role-based access (Admin/User)
+
+🚦 4. Rate Limiting (Prevent DDoS / Brute Force)
+
+	👉 Use:
+	express-rate-limit
+	max: 100 requests per 15 min
+	
+🛡️ 5. Security Headers
+	👉 Use:
+	Helmet
+	app.use(helmet());
+	👉 Protects against:
+	XSS
+	Clickjacking
+	MIME sniffing
+
+⚠️ 6. Prevent XSS (Cross-Site Scripting)
+	👉 Sanitize user input
+	👉 Use:
+	xss-clean
+
+🚫 7. Prevent NoSQL Injection (MongoDB)
+	❌ Dangerous:
+	User.find({ email: req.body.email });
+	👉 Validate + sanitize input
+
+🔒 8. CSRF Protection
+	👉 Use:
+	csurf middleware
+	👉 Protects against:
+	Unauthorized actions from other sites
+
+📁 9. Secure File Upload
+	👉 Validate:
+	File type
+	File size
+	if (file.size > 2MB) reject();
+	
+🔑 10. Environment Variables
+	👉 Never hardcode secrets ❌
+	👉 Use:
+	.env file
+	process.env.JWT_SECRET
+🧠 11. Secure MongoDB
+	👉 Best practices:
+	Enable authentication
+	Use strong passwords
+	Restrict IP access
+
+📊 12. Logging & Monitoring
+
+	👉 Use:
+	Winston
+	PM2
+	👉 Track:
+	Errors
+
+Suspicious activity
+
+🔄 13. HTTPS (Very Important)
+	👉 Always use HTTPS
+	👉 Prevents:
+	Data interception
+
+🚀 14. CORS Configuration
+	👉 Allow only trusted origins
+	app.use(cors({ origin: "https://yourdomain.com" }));
+🔥 15. Dependency Security
+	👉 Check vulnerabilities:
+	npm audit
 
