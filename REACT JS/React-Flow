@@ -276,6 +276,13 @@ function Users() {
   return <div>Total Users: {data.length}</div>;
 }
 
+why dependencies array ?
+
+The dependency array in useEffect is used to control when the effect runs.
+If it’s empty, the effect runs only once after the component loads.
+If we add variables, it runs only when those values change.
+This helps avoid unnecessary re-renders and prevents infinite loops.
+
 
 Q15 Define useContext with example 
 
