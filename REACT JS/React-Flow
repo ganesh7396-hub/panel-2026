@@ -784,5 +784,71 @@ const withAuth = (Component) => {
 
 export default withAuth;
 
+function LazyComponent(){
+
+    return <h2>I'm Lazy  Loading componentss </h2>
+}
+
+export default LazyComponent
 
 
+
+
+What is code splitting in a React application?
+-------------------------
+Code splitting is a technique that helps improve performance by breaking the
+application’s code into smaller chunks and loading them on demand
+
+
+In large React applications, bundling everything into one file can slow down the initial
+load time. Code splitting allows you to split your code at logical points (such as routes or
+components) so that only the necessary code is loaded when required.
+
+
+
+
+React provides built-in support for code splitting through 
+React.lazy() and 
+Suspense ,
+allowing developers to load components asynchronously.
+
+1. Define a component to be lazily loaded using 
+React.lazy .
+2. Wrap the component with 
+React.Suspense , specifying a fallback UI while the
+component loads.
+LazyComponent
+-------------
+
+function LazyComponent(){
+
+    return <h2>I'm Lazy  Loading componentss </h2>
+}
+
+export default LazyComponent
+
+
+
+App
+----
+import { useState } from 'react'
+import React,{Suspense,lazy} from 'react'
+
+const  LazyComponent =lazy(()=>import("./LazyComponent"))
+import './App.css'
+
+function App() {
+  const [count, setCount] = useState(0)
+  return (
+    <>
+    <h1>Main app</h1>
+   <Suspense fallback={<p>Loading Component.........</p>}>
+   
+   <LazyComponent/>
+   </Suspense>
+
+    </>
+  )
+}
+
+export default App
