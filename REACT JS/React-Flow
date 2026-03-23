@@ -736,3 +736,53 @@ return loading ?
 <pre>{JSON.stringify(data)}</pre>;
 }
 
+
+*****
+What are higher order components in React?
+Higher-order components (HOCs) are functions that take a component as input and
+return a new component with added functionality or props.
+
+HOCs are a design pattern for reusing logic across components without duplicating
+code. Instead of inheritance, you wrap a component to enhance its behavior
+
+Component code 
+----------------
+
+import React from "react"
+import withAuth from "./withAuth"
+const Dashbord =()=>{
+
+    return(
+        <div>
+            Dashbord
+        </div>
+    )
+}
+
+export default withAuth(Dashbord)
+
+HOC
+-----
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+
+const withAuth = (Component) => {
+  return function AuthWrapper(props) {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      const isAuth = localStorage.getItem("token");
+
+      if (!isAuth) {
+        navigate("/login");
+      }
+    }, [navigate]);
+
+    return <Component {...props} />;
+  };
+};
+
+export default withAuth;
+
+
+
