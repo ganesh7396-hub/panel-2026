@@ -852,3 +852,37 @@ function App() {
 }
 
 export default App
+
+React Class Component Lifecycle:-
+-------------------------------
+Lifecycle = how a component is created, updated, and removed
+componentDidMount():-Runs when component first loads
+componentDidUpdate():-Runs when state or props change
+componentWillUnmount():-Runs when component is removed
+
+
+React Functional Component Lifecycle:-
+-----------------------------------
+3 Main Phases
+Runs only once
+1)Mounting (Component Created)
+useEffect(() => {
+  console.log("Component Mounted");
+}, []);
+
+2.Updating (State/Props Change)
+
+Runs when dependency changes
+useEffect(() => {
+  console.log("Updated");
+}, [count]);
+
+3.Unmounting (Component Removed)
+Cleanup function
+useEffect(() => {
+  return () => {
+    console.log("Component Unmounted");
+  };
+}, []);
+
+
