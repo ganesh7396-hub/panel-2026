@@ -1,0 +1,160 @@
+
+import React,{useState,useMemo} from "react"
+const productsList = [
+  "iPhone",
+  "Samsung",
+  "OnePlus",
+  "Realme",
+  "Oppo",
+  "Vivo",
+  "Nokia"
+];
+
+
+
+
+const ProductSearch =()=>{
+    const [search,setSearch]=useState("");
+    const [count,setCount]=useState(0);
+
+
+      // 🔥 Expensive operation (simulated)
+  const filteredProducts = useMemo(() => {
+    console.log("Filtering running...");
+    
+    return productsList.filter((item) =>
+      item.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [search]); // only runs when search changes
+
+    return(
+        <>
+        
+        <h2> Product Search</h2>
+
+
+        <input type="text"
+        placeholder="search product..."
+        value={search}
+        onChange={(e)=>{setSearch(e.target.value)}}/>
+        <h3> Result :</h3>
+
+  {filteredProducts.map((item, index) => {
+  return <p key={index}>{item}</p>;
+})}
+        <button onClick={()=>{setCount(count+1)}}>
+Count:{count}
+
+        </button>
+
+
+        </>
+    )
+
+}
+
+export default ProductSearch;
+
+
+
+
+
+React Class Component Lifecycle:-
+-------------------------------
+Lifecycle = how a component is created, updated, and removed
+componentDidMount():-Runs when component first loads
+componentDidUpdate():-Runs when state or props change
+componentWillUnmount():-Runs when component is removed
+
+
+React Functional Component Lifecycle:-
+-----------------------------------
+3 Main Phases
+Runs only once
+1)Mounting (Component Created)
+useEffect(() => {
+  console.log("Component Mounted");
+}, []);
+
+2.Updating (State/Props Change)
+
+Runs when dependency changes
+useEffect(() => {
+  console.log("Updated");
+}, [count]);
+
+3.Unmounting (Component Removed)
+Cleanup function
+useEffect(() => {
+  return () => {
+    console.log("Component Unmounted");
+  };
+}, []);
+
+
+
+Q What is StrictMode in React?
+import { StrictMode } from "react";
+👉 StrictMode is a development tool in React
+👉 It helps you find potential problems in your app
+StrictMode is a development-only feature in React that helps identify potential problems by enabling extra checks and warnings
+
+Q Redux implemenation ?
+
+useSelector → get data from store
+useDispatch → send action to update store
+Reducer → updates state
+store → central data storage
+
+createStore → creates the Redux store
+applyMiddleware → used to add extra features (middleware)
+redux-thunk is a middleware
+It allows async operations (API calls, delays, etc.)
+
+
+
+
+Q How do you convert JSON data to SOAP && update data in Netsuite request in Node.js?
+
+const express = require('express');
+const soap = require('soap');
+
+const app = express();
+app.use(express.json());
+
+const WSDL_URL = 'https://webservices.netsuite.com/wsdl/v2023_1_0/netsuite.wsdl';
+
+app.post('/update-customer', async (req, res) => {
+  try {
+    const client = await soap.createClientAsync(WSDL_URL);
+
+    const { id, name } = req.body;
+
+    const args = {
+      record: {
+        internalId: id,
+        companyName: name
+      }
+    };
+
+    const [response] = await client.updateAsync(args);
+
+    res.json({
+      message: "Updated successfully",
+      data: response
+    });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.listen(3000, () => console.log("Server running on port 3000"));
+
+Q About micro service project?
+
+
+We built a microservices-based timesheet system with employee and approver services. We used a 3-layer architecture (experience, process, system). Services communicate via Azure Service Bus using queues for better scalability. Failed messages are moved to a Dead Letter Queue (DLQ) for retry and debugging. The system layer integrates with NetSuite using SOAP APIs.”
+
+“Azure Service Bus itself doesn’t store detailed logs. We use Azure Monitor and Application Insights for logging and monitoring. In our project, we tracked message processing, failures, retries, and DLQ events. Application Insights was mainly used for real-time debugging and performance monitoring.
+
