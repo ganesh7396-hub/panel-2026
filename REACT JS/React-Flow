@@ -886,3 +886,24 @@ useEffect(() => {
 }, []);
 
 
+
+
+Q What is StrictMode in React?
+import { StrictMode } from "react";
+👉 StrictMode is a development tool in React
+👉 It helps you find potential problems in your app
+StrictMode is a development-only feature in React that helps identify potential problems by enabling extra checks and warnings
+
+Q Redux implemenation ?
+
+useSelector → get data from store
+useDispatch → send action to update store
+Reducer → updates state
+store → central data storage
+
+createStore → creates the Redux store
+applyMiddleware → used to add extra features (middleware)
+redux-thunk is a middleware
+It allows async operations (API calls, delays, etc.)
+
+
