@@ -1395,3 +1395,59 @@ Suspicious activity
 	👉 Check vulnerabilities:
 	npm audit
 
+
+Question 53) What is Redis in Node.js?
+Redis is an in-memory data store used in Node.js for caching, session management, and real-time data processing to reduce database load and improve performance.
+Why Redis is used in Node.js?
+Node.js is non-blocking and fast, but databases like MongoDB or PostgreSQL are slower compared to memory.
+👉 So we use Redis to:
+
+⚡ Reduce database calls
+🚀 Improve API response time
+📈 Handle high traffic efficiently
+
+
+Redis is supported in all major cloud providers like AWS (ElastiCache), Azure (Azure Cache for Redis),
+and GCP (Memorystore), where it is offered as a fully managed service
+
+MongoDB = Main storage (hard disk)
+Redis = RAM (super fast, temporary)
+
+const redis = require("redis");
+
+const client = redis.createClient({
+  url: process.env.REDIS_URL // from environment
+});
+
+client.on("error", (err) => {
+  console.error("Redis Error:", err);
+});
+
+client.on("connect", () => {
+  console.log("Redis Connected ✅");
+});
+
+(async () => {
+  await client.connect();
+})();
+
+module.exports = client;
+
+
+const client = require("./config/redis");
+
+app.get("/users/:id", async (req, res) => {
+  const userId = req.params.id;
+
+  const cachedData = await client.get(`user:${userId}`);
+
+  if (cachedData) {
+    return res.json(JSON.parse(cachedData));
+  }
+
+  const user = await User.findById(userId);
+
+  await client.setEx(`user:${userId}`, 60, JSON.stringify(user));
+
+  res.json(user);
+});
