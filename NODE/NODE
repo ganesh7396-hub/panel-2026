@@ -737,7 +737,7 @@ Question 28)How many types of status code in node js ?
     502 Bad Gateway	Invalid response from upstream server	Server Error (5xx)
     503 Service Unavailable	Server temporarily unavailable	Server Error (5xx)
     504 Gateway Timeout	Timeout while waiting for upstream server	Server Error (5xx)
-
+    429 Too Many Requests The client (user/app) is sending too many requests in a short time, so the server is blocking further requests temporarily.
 Question 29)How do you handle memory leaks in node js ?
 
 memory leaks:-
