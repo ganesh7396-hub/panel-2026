@@ -1048,3 +1048,33 @@ Apart from these phases there is also process.nextTick() and promise callback wh
 process.nextTick() callbacks are always executed before the event loop moves to the next phase.
 Resolved Promise callbacks are processed immediately after process.nextTick().
 
+
+Q What is CPU intensive task in node js?
+
+CPU intensive tasks are operations that require heavy computation and continuously use the CPU
+such as image processing, video encoding, large calculations, encryption, data compression, or looping through huge datasets.
+
+Q How to Handle CPU Intensive Tasks?
+
+1. Worker Threads :-
+
+Run heavy tasks in separate threads.
+const { Worker } = require('worker_threads');
+Best solution in modern Node.js.
+
+2. Child Processes
+const { fork } = require('child_process');
+Useful for separate processes.
+
+3.Queue Systems
+
+Use:
+
+BullMQ
+RabbitMQ
+Kafka
+Real-Time Use Cases
+PDF generation for salary slips, invoices, bank statements, and downloadable reports
+Excel report processing for large database exports, analytics, and bulk data handling
+Image processing for resizing, thumbnail creation, compression, and optimization
+Encryption for bcrypt password hashing, JWT authentication, and secure data protection
