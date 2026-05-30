@@ -1,0 +1,645 @@
+Why AWS SQS (Simple Queue Service) was introduced?
+--------------------------------------------------
+AWS SQS was introduced to solve the problem of communication between different parts of a system — safely and reliably — without losing messages.
+
+
+Imagine you have:
+App A → sends data (order placed)
+App B → processes data (generate invoice)
+If App B is busy or down, App A can’t wait forever.
+So SQS acts as a middleman (a queue) to hold the messages safely until B is ready.
+
+
+User places order → App A sends directly to App B → App B is down ❌ → Order lost
+User places order → App A sends message to SQS → App B reads message later ✅
+
+
+Problem	                                                 SQS Solution
+Direct system-to-system calls can fail if one is down	 SQS stores message until receiver is ready
+Systems tightly coupled	                                 SQS decouples them
+Message loss on errors	                                 SQS guarantees delivery (at least once)
+Sudden traffic spikes crash backend	                     SQS buffers and smooths the load
+
+
+
+SQS was introduced to ensure reliable, decoupled, 
+and scalable communication between microservices — without losing messages, even when parts of the system fail.
+
+
+What does "Decoupling" mean in AWS SQS?
+
+Decoupling means separating two systems so they can work independently — without depending on each other’s speed, timing, or availability.
+
+In other words:
+
+The sender doesn’t need to wait for the receiver.
+
+🔧 Without Decoupling (Tightly Coupled System)
+
+Let’s say you have:
+
+Order Service → sends order data
+
+Email Service → sends confirmation email
+
+If the Email Service is slow or down, the Order Service must wait or fails ❌
+
+
+
+Prep — install & env
+mkdir sqs-demo && cd sqs-demo
+npm init -y
+npm install @aws-sdk/client-sqs dotenv
+
+
+npm init -y
+npm install @aws-sdk/client-sqs dotenv
+Create .env (never commit real keys):
+
+ini
+Copy code
+AWS_REGION=us-east-1
+AWS_ACCESS_KEY_ID=YOUR_KEY
+AWS_SECRET_ACCESS_KEY=YOUR_SECRET
+QUEUE_URL=https://sqs.us-east-1.amazonaws.com/123456789012/order-queue
+(You can create queue via console or CLI — see below.)
+
+2) Create queue (AWS CLI quick)
+bash
+Copy code
+# create queue
+aws sqs create-queue --queue-name order-queue --region us-east-1
+
+# if you want a dead-letter queue (DLQ), create DLQ then set redrive policy:
+aws sqs create-queue --queue-name order-dlq --region us-east-1
+# get the DLQ ARN and set redrive policy on order-queue (example JSON)
+# (You can do this in Console or follow AWS docs for redrivePolicy)
+
+
+// producer.js
+import dotenv from "dotenv";
+import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
+dotenv.config();
+
+const REGION = process.env.AWS_REGION;
+const QUEUE_URL = process.env.QUEUE_URL;
+
+const sqs = new SQSClient({ region: REGION });
+
+/**
+ * sendOrder: sends order object to SQS
+ * @param {Object} order - { orderId, customerEmail, items, total }
+ */
+export async function sendOrder(order) {
+  const params = {
+    QueueUrl: QUEUE_URL,
+    // MessageBody must be a string
+    MessageBody: JSON.stringify(order),
+    // optional: use MessageAttributes for routing or small metadata
+    MessageAttributes: {
+      eventType: {
+        DataType: "String",
+        StringValue: "ORDER_PLACED",
+      },
+    },
+  };
+
+  const cmd = new SendMessageCommand(params);
+  const res = await sqs.send(cmd);
+  console.log("Sent messageId:", res.MessageId);
+  return res;
+}
+
+// Example usage when run directly:
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const exampleOrder = {
+    orderId: "ORD-1001",
+    customerEmail: "alice@example.com",
+    items: [{ sku: "SKU-1", qty: 2 }],
+    total: 129.99,
+    placedAt: new Date().toISOString(),
+  };
+
+  sendOrder(exampleOrder).catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
+}
+
+
+// consumer.js
+import dotenv from "dotenv";
+import { SQSClient, ReceiveMessageCommand, DeleteMessageCommand } from "@aws-sdk/client-sqs";
+dotenv.config();
+
+const REGION = process.env.AWS_REGION;
+const QUEUE_URL = process.env.QUEUE_URL;
+
+const sqs = new SQSClient({ region: REGION });
+
+/**
+ * pollAndProcess: long-polls the queue, processes messages, deletes on success
+ */
+async function pollAndProcess() {
+  while (true) {
+    try {
+      const params = {
+        QueueUrl: QUEUE_URL,
+        MaxNumberOfMessages: 5,      // up to 10
+        WaitTimeSeconds: 20,         // long polling (reduce empty responses)
+        VisibilityTimeout: 30,       // seconds the message is "invisible" while processing
+        MessageAttributeNames: ["All"],
+      };
+
+      const cmd = new ReceiveMessageCommand(params);
+      const res = await sqs.send(cmd);
+
+      if (!res.Messages || res.Messages.length === 0) {
+        // nothing to process — loop and poll again
+        continue;
+      }
+
+      for (const msg of res.Messages) {
+        try {
+          const body = JSON.parse(msg.Body);
+          console.log("Processing order:", body.orderId);
+
+          // --- TODO: do actual work here (send email, process payment, etc.) ---
+          // simulate work with a short delay
+          await new Promise((r) => setTimeout(r, 500));
+
+          // if success -> delete message from queue
+          const delCmd = new DeleteMessageCommand({
+            QueueUrl: QUEUE_URL,
+            ReceiptHandle: msg.ReceiptHandle,
+          });
+          await sqs.send(delCmd);
+          console.log("Processed & deleted:", body.orderId);
+        } catch (processingErr) {
+          console.error("Processing error:", processingErr);
+          // If we don't delete the message, it becomes visible again after visibility timeout
+          // Consider sending failing messages to DLQ by configuring redrive policy on the queue
+        }
+      }
+    } catch (err) {
+      console.error("Receive error:", err);
+      // optional backoff on failures
+      await new Promise((r) => setTimeout(r, 2000));
+    }
+  }
+}
+
+// start polling
+pollAndProcess().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
+
+
+
+
+
+Amazon SNS (Simple Notification Service) is a fully managed pub/sub (publish-subscribe) messaging service.
+
+SNS:
+Simple Notification Service
+
+Using 
+-----
+EC2  ---1/2statsu checks - send mail/phone when it is fail/
+AutoScalling ---Scalling Policy Load Crashing  -Mail
+CloudWatch :2. CloudWatch Alarm
+
+Create a CloudWatch Alarm based on the metric filter.
+Set a threshold, e.g., "If there are more than 5 errors in 5 minutes"
+EBS
+
+
+Topic-group 
+Subscription -- User
+
+SMS,EMAIL,HTTPS<LAMDA
+
+
+It allows you to send notifications or messages to multiple subscribers instantly — such as:
+
+Email
+SMS
+HTTP/HTTPS endpoint
+AWS Lambda
+SQS queue
+Mobile push (FCM, APNs)
+
+
+Imagine you run an E-commerce application.
+------------------------------------------
+When a new order is placed, you want to:
+
+Notify the customer via email/SMS.
+
+Notify the warehouse service (via HTTP or Lambda).
+
+Log order details into a monitoring system (via SQS).
+
+This is where SNS helps — you publish one message, and SNS fan-outs that message to multiple
+
+
+Order Service (Node.js)
+       ↓
+SNS Topic: "new-order-topic"
+       ↓
+Subscribers:
+   - Email: customer@example.com
+   - Lambda: warehouseNotifier
+   - SQS: orderLogQueue
+
+
+RealTime Example :
+-----------------
+
+SNS → Email: simple, scenario-based Node.js example (step-by-step)
+Great — here’s a small, practical walkthrough you can follow top-to-bottom. We'll cover:
+scenario description
+prerequisites / IAM
+create topic & subscribe an email (console, CLI, and code)
+-----------------------------------------------------------
+Node.js code to publish a mail notification (AWS SDK v3)
+-------------------------------------------------------
+test steps and best practices
+
+Required Packages :
+
+npm install @aws-sdk/client-sns dotenv
+
+
+
+IAM (minimum permissions)
+
+Create an IAM policy with least privilege for this demo:
+==============================================================
+
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Effect": "Allow",
+    "Action": [
+      "sns:CreateTopic",
+      "sns:Subscribe",
+      "sns:Publish",
+      "sns:ListSubscriptionsByTopic"
+    ],
+    "Resource": "*"
+  }]
+}
+
+
+3) Create topic & subscribe an email
+========================================
+Option A — AWS Console (quick)
+
+Console → SNS → Topics → Create topic → Standard → name: order-notifications.
+
+Click topic → Subscriptions → Create subscription:
+
+Protocol: Email
+
+Endpoint: customer@example.com
+
+The email recipient will get a confirmation mail — they must click the link to confirm.
+
+
+# create topic
+aws sns create-topic --name order-notifications --region us-east-1
+
+# subscribe email (returns SubscriptionArn = pending confirmation)
+aws sns subscribe --topic-arn arn:aws:sns:us-east-1:123456789012:order-notifications \
+  --protocol email --notification-endpoint customer@example.com --region us-east-1
+
+
+Option C — Programmatically (Node.js) — create topic + subscribe :
+
+
+
+// setupTopic.js
+import { SNSClient, CreateTopicCommand, SubscribeCommand } from "@aws-sdk/client-sns";
+import dotenv from "dotenv";
+dotenv.config();
+
+const client = new SNSClient({ region: process.env.AWS_REGION });
+
+
+
+Option C — Programmatically (Node.js) — create topic + subscribe
+
+Create setupTopic.js
+===================
+
+// setupTopic.js
+import { SNSClient, CreateTopicCommand, SubscribeCommand } from "@aws-sdk/client-sns";
+import dotenv from "dotenv";
+dotenv.config();
+
+const client = new SNSClient({ region: process.env.AWS_REGION });
+
+async function createTopicAndSubscribe(email) {
+  const create = new CreateTopicCommand({ Name: "order-notifications" });
+  const { TopicArn } = await client.send(create);
+  console.log("TopicArn:", TopicArn);
+
+  const subscribe = new SubscribeCommand({
+    TopicArn,
+    Protocol: "email",
+    Endpoint: email
+  });
+  const res = await client.send(subscribe);
+  console.log("Subscription (pending):", res.SubscriptionArn);
+  return TopicArn;
+}
+
+createTopicAndSubscribe("customer@example.com")
+  .catch(err => console.error("Err:", err));
+
+
+
+4) Node.js code to publish an email notification
+==============================================
+Create sendOrderEmail.js:
+
+
+// sendOrderEmail.js
+import { SNSClient, PublishCommand } from "@aws-sdk/client-sns";
+import dotenv from "dotenv";
+dotenv.config();
+
+const REGION = process.env.AWS_REGION || "us-east-1";
+const TOPIC_ARN = process.env.TOPIC_ARN || "arn:aws:sns:us-east-1:123456789012:order-notifications";
+
+const sns = new SNSClient({ region: REGION });
+
+/**
+ * Publish order notification to SNS topic (which will deliver email to subscribers).
+ * @param {Object} payload - plain object with order info
+ */
+export async function sendOrderNotification(payload) {
+  const message = {
+    default: `Order ${payload.orderId} placed.`,
+    // email clients will see the Message (plain text). You can also customize Subject.
+  };
+
+  const params = {
+    TopicArn: TOPIC_ARN,
+    Message: JSON.stringify(payload), // JSON payload for subscribers that expect JSON
+    Subject: `Order ${payload.orderId} — Confirmation`,
+    MessageStructure: "string"
+  };
+
+  try {
+    const cmd = new PublishCommand(params);
+    const res = await sns.send(cmd);
+    console.log("Published MessageId:", res.MessageId);
+    return res;
+  } catch (err) {
+    console.error("Publish error:", err);
+    throw err;
+  }
+}
+
+// Example usage when an order is placed:
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const exampleOrder = {
+    orderId: "ORD-1001",
+    customerEmail: "customer@example.com",
+    items: [{ sku: "SKU-1", qty: 2 }],
+    total: 129.99,
+    placedAt: new Date().toISOString()
+  };
+
+  sendOrderNotification(exampleOrder).catch(() => process.exit(1));
+}
+
+
+
+What is AWS CloudWatch?
+
+Amazon CloudWatch is a monitoring and observability service in AWS.
+It helps you track, collect, and analyze metrics, logs, and events from your AWS resources and applications.
+
+
+CloudWatch helps you to:
+
+Purpose	Description
+1. Monitor Metrics	:   Tracks resource usage like CPU, memory, disk, and network (for EC2, Lambda, RDS, etc.)
+2. Collect Logs     :	Stores and searches application or system logs (using CloudWatch Logs)
+3. Set Alarms       :	Sends alerts when a metric crosses a threshold (like high CPU usage or API errors)
+4. View Dashboards  :	Create visual dashboards to track application health
+5. Automate Actions :	Trigger actions (like restarting instances or sending SNS notifications) when issues occur
+6. Troubleshoot     :   Performance	Helps debug latency or error issues using metrics and logs
+
+
+
+CloudWatch in Application Level (Real-Time Use)
+
+At the application level, CloudWatch helps you track custom business or app performance metrics — not just server metrics.
+✅ Example: Node.js or .NET Application
+Let’s say you have an e-commerce app running on EC2 or ECS.
+You can use CloudWatch for:
+Custom Metrics
+Track “number of user logins,” “failed API calls,” or “payment success rate.”
+You can send these metrics to CloudWatch using the AWS SDK.
+// Example (Node.js)
+const AWS = require('aws-sdk');
+const cloudwatch = new AWS.CloudWatch();
+const params = {
+  MetricData: [
+    {
+      MetricName: 'FailedLoginAttempts',
+      Dimensions: [{ Name: 'Application', Value: 'EcommerceApp' }],
+      Unit: 'Count',
+      Value: 5
+    }
+  ],
+  Namespace: 'MyApp/Metrics'
+};
+
+cloudwatch.putMetricData(params, (err, data) => {
+  if (err) console.log(err);
+  else console.log('Metric Sent:', data);
+});
+
+
+Application Logs
+Send your application logs to CloudWatch Logs.
+Then you can search and create filters to find specific errors or patterns.
+
+Example:
+
+Store all your API request/response logs
+
+Use filters to find "status":500 errors quickly.
+Set Alarms
+
+Example:
+Alarm if ErrorRate > 5% for 5 minutes.
+Alarm if Lambda duration > 3 seconds.
+CloudWatch Dashboard
+Visualize your key metrics like:
+Average API latency
+Error counts
+Number of orders placed
+Active users
+
+🧠 Real-Time Example (Scenario)
+--------------------------------
+Imagine you have a backend service deployed on AWS Lambda or EC2.
+You can use CloudWatch to:
+Monitor Lambda execution duration
+Set alarm: “If function fails > 3 times in 1 minute, send SNS alert”
+Push custom metrics: e.g., number of processed orders
+Store application logs using CloudWatch Logs
+Analyze logs to detect patterns or exceptions (like timeout errors)
+
+
+
+
+Amazon API Gateway is a fully managed service that helps you create, publish, secure, and monitor APIs for your backend applications (like Node.js, Lambda, etc).
+Think of it as a “front door” for your application —
+All client requests (web, mobile, etc.) go through API Gateway before reaching your backend service
+
+Purpose	Description
+Routing	Sends HTTP requests to the right backend (like AWS Lambda, EC2, or any REST endpoint).
+Security	Supports authentication (JWT, Cognito, IAM) and rate-limiting (throttling).
+Transformation	Can modify requests/responses (headers, body) before sending to backend.
+Monitoring	Works with CloudWatch to log metrics and errors.
+Scalability	Automatically scales to handle millions of requests per second.
+
+
+exports.handler = async (event) => {
+  console.log("Incoming event:", event);
+
+  const name = event.queryStringParameters?.name || "Guest";
+
+  return {
+    statusCode: 200,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      message: `Hello, ${name}! Welcome to AWS API Gateway + Lambda.`,
+    }),
+  };
+};
+
+https://abcd1234.execute-api.ap-south-1.amazonaws.com/dev/hello?name=Ganesh
+
+
+
+When to Use API Gateway
+Scenario	Why use API Gateway
+You have multiple microservices	It can route and manage them easily
+You want to secure APIs	Add authentication (JWT, Cognito, IAM)
+You want serverless backend	Works perfectly with AWS Lambda
+You want monitoring and throttling	Built-in CloudWatch integration
+
+
+
+Scenario Overview
+
+You have two backend services:
+User Account Service → manages user info, balance, profile
+Bank Transaction Service → handles deposits, withdrawals, transfers
+
+          ┌────────────────────────────┐
+          │        Clients             │
+          │  (Web / Mobile / Postman)  │
+          └────────────┬───────────────┘
+                       │
+             🌐 AWS API Gateway
+                       │
+        ┌──────────────┴────────────────┐
+        │                               │
+┌───────────────────┐         ┌────────────────────┐
+│ UserAccountService│         │ BankTransactionSvc │
+│ (Node.js + Express)│         │ (Node.js + Express)│
+└───────────────────┘         └────────────────────┘
+        │                               │
+     MongoDB                        PostgreSQL
+
+
+user-account-service
+--------------------
+File: user-account-service/server.js
+
+
+const express = require('express');
+const app = express();
+app.use(express.json());
+
+app.get('/users/:id', (req, res) => {
+  const user = { id: req.params.id, name: 'Ganesh', balance: 5000 };
+  res.json(user);
+});
+
+app.listen(4001, () => console.log('UserAccount Service running on 4001'));
+
+
+bank-transaction-service
+-----------------------
+File: bank-transaction-service/server.js
+
+const express = require('express');
+const app = express();
+app.use(express.json());
+
+app.post('/transfer', (req, res) => {
+  const { from, to, amount } = req.body;
+  res.json({ message: `Transferred ₹${amount} from ${from} to ${to}` });
+});
+
+app.listen(4002, () => console.log('BankTransaction Service running on 4002'));
+
+Deploy Each Service
+====================
+
+
+You can:
+
+Run locally (for testing)
+
+OR deploy to AWS (e.g., ECS, Lambda, or EC2)
+node user-account-service/server.js
+node bank-transaction-service/server.js
+
+https://xyz1234.execute-api.ap-south-1.amazonaws.com/dev/users/1
+https://xyz1234.execute-api.ap-south-1.amazonaws.com/dev/transfer
+
+xample (simple JWT check in Node microservice):
+
+app.use((req, res, next) => {
+  const token = req.headers.authorization;
+  if (!token || token !== "Bearer secret123") {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  next();
+});
+
+
+dd a Local API Gateway Mock (Optional for Development)
+
+If you don’t want to use AWS yet, simulate an API gateway locally using Express as a Gateway:
+
+File: api-gateway/server.js
+----------------------------
+const express = require('express');
+const { createProxyMiddleware } = require('http-proxy-middleware');
+
+const app = express();
+
+app.use('/users', createProxyMiddleware({ target: 'http://localhost:4001', changeOrigin: true }));
+app.use('/transfer', createProxyMiddleware({ target: 'http://localhost:4002', changeOrigin: true }));
+
+app.listen(3000, () => console.log('API Gateway running on port 3000'));
+
+
+✅ Now you can test:
+
+GET http://localhost:3000/users/1
+POST http://localhost:3000/transfer
+
