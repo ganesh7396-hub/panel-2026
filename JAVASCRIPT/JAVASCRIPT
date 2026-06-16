@@ -984,9 +984,7 @@ greetJohn();
 
  Question 15) What is  Closure with example ?
 
-A closures is the combination of functions bundle together with reference to its  state
-environment A clousures gives  access to outer function scope  from an inner function 
-in javscript closure are created every time  a function is created at function each time
+A closure is a function bundled with its lexical scope, which allows it to access variables from its outer function even after the outer function has finished execution.
 
 code :
 function init(){
