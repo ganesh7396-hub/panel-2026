@@ -163,7 +163,32 @@ interface User {
 
 
 Question 18)What is Discriminated Union?
-A:“A discriminated union uses a common literal property to safely differentiate between types
+We combine multiple object types, and each type has one common property (called the discriminator) with a different fixed valuees
+
+Step 1: Create two types
+type Success = {
+  status: 'success';
+  data: string;
+};
+
+type Error = {
+  status: 'error';
+  message: string;
+};
+
+Both types have a common property: status
+
+Success → status: 'success'
+
+Error → status: 'error'
+
+That status field is the discriminator.
+
+Step 2: Create a union
+type ApiResponse = Success | Error;
+
+Now ApiResponse can be either Success or Error.
+
 
 Question 19)What is Partial, Pick, Omit?
 Partial: “Makes all properties optional.”
