@@ -917,6 +917,22 @@ const language = sessionStorage.getItem('language');
 console.log(theme);       // Output: dark
 console.log(language);    // Output: en
 
+cookie:
+-------
+A cookie is a small piece of data that a website stores in the user's browser. It helps the website remember information about the user between requests.
+
+Why do we use cookies?
+
+We use cookies to remember user information, such as:
+Login session
+User preferences (language, theme)
+Shopping cart items
+Remember Me functionality
+Tracking user activity (analytics)
+
+
+
+
 Question 14) what are the Call(),apply(),bind() with example?
 
 call() Method:
