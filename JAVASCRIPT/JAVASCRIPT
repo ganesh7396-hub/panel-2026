@@ -1295,3 +1295,42 @@ app.post("/convert-json-to-soap", async (req, res) => {
 app.listen(3000, () => {
   console.log("Server running on port 3000");
 });
+
+
+
+Memory -Memory-Heap-Memory-Leak-Garbage Collection
+
+
+Memory -Memory-Heap-Memory-Leak-Garbage Collection
+Stack Memory
+----------
+Stack memory stores primitive values and function calls. It is fast and automatically managed.
+
+Heap Memory
+----------
+Heap memory stores objects, arrays, and functions. Variables hold references to this memory.
+
+Memory Leak
+------------
+A memory leak happens when unused memory is not released, causing the application's memory usage to keep growing.
+
+Garbage Collection
+-----------------
+Garbage Collection automatically removes objects that are no longer reachable, freeing memory.
+
+Stack
+↓
+Primitive values
+(number, string, boolean)
+
+Heap
+↓
+Objects, Arrays, Functions
+
+Memory Leak
+↓
+Unused memory is NOT released
+
+Garbage Collection
+↓
+Automatically cleans unused memory
