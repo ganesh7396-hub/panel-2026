@@ -1153,6 +1153,17 @@ Questions 22)What is Lexical Environment in JavaScript ?
 A lexical environment is the internal data structure that JavaScript uses to store variables and functions in scope, 
 along with a reference to its parent scope.
 
+
+Lexical scope means a function can access variables from the place where it was defined (written), not where it is called.
+
+let name = "Ganesh";
+
+function greet() {
+    console.log(name);
+}
+
+greet();
+
 function outer() {
   let name = "Ganesh";
 
